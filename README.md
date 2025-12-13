@@ -1,29 +1,10 @@
-# 🤖 Vapi Personal Assistant Voice Agent
+# 🤖 Vapi Voice Agent
 
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)]()
-[![Maintainer](https://img.shields.io/static/v1?label=Yevhen%20Ruban&message=Maintainer&color=red)](mailto:yevhen.ruban@extrawest.com)
-[![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)]()
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 ![GitHub release](https://img.shields.io/badge/release-v1.0.0-blue)
 
 A FastAPI-based backend service for a personal assistant voice agent integrated with Vapi AI. 
 This project demonstrates how to build a structured API that handles todo lists, reminders, and calendar events through voice commands processed by AI.
-
-
-
-
-https://github.com/user-attachments/assets/56214fbe-6429-4d97-9695-ecccc34d0a71
-
-
-### Phone call demo
-
-
-
-
-https://github.com/user-attachments/assets/5859b32b-7c49-487b-84c7-7647eb0d860a
-
-
-
 
 ## 🌟 Features
 
@@ -46,8 +27,8 @@ https://github.com/user-attachments/assets/5859b32b-7c49-487b-84c7-7647eb0d860a
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/extrawest/vapi_personal_assistant_voice_agent.git
-cd vapi_personal_assistant_voice_agent
+git clone https://github.com/vwake09/vapi_voice_agent.git
+cd vapi_voice_agent
 ```
 
 2. Install dependencies:
@@ -99,4 +80,3 @@ This service is designed to work with Vapi AI's voice assistant platform. The in
 - **SQLite**: Lightweight disk-based database
 - **Requests**: HTTP library for making API calls to Vapi
 
-Developed by [extrawest](https://extrawest.com/). Software development company
