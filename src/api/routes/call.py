@@ -3,7 +3,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
-from src.models.domain.call import CallRequest, CallResponse, TriggerCallRequest, WebCallConfigResponse
+from src.models.domain.call import CallRequest, CallResponse, TriggerCallRequest, WebCallConfigResponse, WebCallResponse
 from src.models.domain.response import ToolResponse
 from src.models.domain.tool import ValidatedToolCall
 from src.services.call_service import CallService
@@ -29,29 +29,31 @@ async def make_call(
     return ToolResponse.create(validated.tool_call_id, result)
 
 
-@router.post('/trigger_call/', response_model=CallResponse)
+@router.post('/trigger_call/', response_model=WebCallResponse)
 async def trigger_call(
-    request: TriggerCallRequest,
-    service: Annotated[CallService, Depends(get_call_service)]
+    request: TriggerCallRequest = TriggerCallRequest(),
+    service: CallService = Depends(get_call_service)
 ):
     """
-    Simplified endpoint to trigger an outbound call with a single click.
+    Trigger a web-based call - user connects to AI assistant via browser.
     
-    This endpoint can be called directly without the Vapi request wrapper.
-    Just provide the customer phone number, and optionally override the 
-    assistant_id and phone_number_id.
+    Simply call this endpoint and the user can connect through their browser.
+    No phone number needed - this is for inbound web calls where the user
+    talks to the AI assistant through WebRTC.
     
-    Example payload:
-    {
-        "customer_number": "+1234567890"
-    }
+    Example payload (minimal - uses defaults):
+    {}
     
     Or with overrides:
     {
-        "customer_number": "+1234567890",
         "assistant_id": "your-assistant-id",
-        "phone_number_id": "your-phone-number-id"
+        "assistant_overrides": {
+            "firstMessage": "Hello! How can I help you today?"
+        }
     }
+    
+    Returns connection details including web_call_url and transport config
+    that the frontend can use to connect the user to the call.
     """
     return await service.trigger_call(request)
 
