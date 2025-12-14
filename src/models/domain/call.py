@@ -10,10 +10,9 @@ class CallRequest(BaseModel):
     customer: CustomerInfo = Field(..., description="Customer information")
 
 class TriggerCallRequest(BaseModel):
-    """Simplified request for triggering an outbound call."""
-    customer_number: str = Field(..., description="Customer phone number to call")
+    """Request for triggering a web-based call (user connects via browser)."""
     assistant_id: Optional[str] = Field(None, description="Override default assistant ID")
-    phone_number_id: Optional[str] = Field(None, description="Override default phone number ID")
+    assistant_overrides: Optional[dict] = Field(None, description="Optional assistant configuration overrides")
 
 class WebCallConfigResponse(BaseModel):
     """Response containing configuration for Web SDK to initiate a browser-based call."""
@@ -25,3 +24,10 @@ class CallResponse(BaseModel):
     call_id: str = Field(..., description="ID of the created call")
     status: str = Field(..., description="Status of the call")
     message: Optional[str] = Field(None, description="Additional message about the call")
+
+class WebCallResponse(BaseModel):
+    """Response for web call containing connection details."""
+    call_id: str = Field(..., description="ID of the created call")
+    status: str = Field(..., description="Status of the call")
+    web_call_url: Optional[str] = Field(None, description="URL to connect to the web call")
+    transport: Optional[dict] = Field(None, description="Transport/WebRTC configuration for connecting")
