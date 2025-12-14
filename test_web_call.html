@@ -66,7 +66,7 @@
         <h1>🎙️ Voice Assistant</h1>
         <p class="subtitle">Web Call Test</p>
         
-        <button id="callBtn" onclick="handleCall()">
+        <button id="callBtn">
             📞<br>Start Call
         </button>
         
@@ -74,7 +74,11 @@
         <div id="log"></div>
     </div>
 
-    <script>
+    <script type="module">
+        // Import Vapi module and get default export
+        import VapiModule from 'https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.5.2/+esm';
+        const Vapi = VapiModule.default || VapiModule;
+        
         let vapi = null;
         let calling = false;
         let config = null;
@@ -118,53 +122,14 @@
                 log('Config loaded: ' + config.transport.assistantId.substring(0,8) + '...');
             } catch(e) {
                 log('Failed to fetch config: ' + e.message, true);
-                status('Backend error', 'error');
+                status('Backend error - is server running?', 'error');
                 return;
             }
             
-            log('Loading Vapi SDK...');
-            
-            // Load SDK dynamically
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/@vapi-ai/web/dist/vapi.umd.js';
-            script.onload = () => {
-                log('SDK script loaded');
-                initVapi();
-            };
-            script.onerror = (e) => {
-                log('Failed to load SDK script', true);
-                status('SDK load failed', 'error');
-            };
-            document.head.appendChild(script);
-        }
-        
-        function initVapi() {
-            // Check what's available on window
-            log('Checking window.Vapi: ' + (typeof window.Vapi));
-            
-            // Try different possible exports
-            let VapiClass = window.Vapi || window.VapiWeb || window.VapiSDK;
-            
-            // If it's a module with default export
-            if (VapiClass && VapiClass.default) {
-                VapiClass = VapiClass.default;
-                log('Using default export');
-            }
-            
-            if (!VapiClass) {
-                // List all window properties that might be Vapi
-                const candidates = Object.keys(window).filter(k => 
-                    k.toLowerCase().includes('vapi') || 
-                    (typeof window[k] === 'function' && window[k].toString().includes('Vapi'))
-                );
-                log('Candidates: ' + (candidates.join(', ') || 'none'), true);
-                status('SDK not found on window', 'error');
-                return;
-            }
+            log('Initializing Vapi SDK...');
             
             try {
-                log('Creating Vapi instance...');
-                vapi = new VapiClass(config.transport.publicKey);
+                vapi = new Vapi(config.transport.publicKey);
                 log('Vapi instance created!');
                 
                 vapi.on('call-start', () => {
@@ -185,7 +150,7 @@
                     status('Error occurred', 'error');
                 });
                 
-                vapi.on('speech-start', () => log('Event: speech-start'));
+                vapi.on('speech-start', () => log('Event: speech-start (assistant speaking)'));
                 vapi.on('speech-end', () => log('Event: speech-end'));
                 
                 status('✅ Ready! Click Start Call', 'success');
@@ -193,7 +158,7 @@
                 
             } catch(e) {
                 log('Failed to create Vapi: ' + e.message, true);
-                status('Init failed: ' + e.message, 'error');
+                status('SDK init failed: ' + e.message, 'error');
             }
         }
         
@@ -214,7 +179,7 @@
                 status('Connecting...', '');
                 
                 try {
-                    await vapi.start({ assistantId: config.transport.assistantId });
+                    await vapi.start(config.transport.assistantId);
                     log('vapi.start() completed');
                 } catch(e) {
                     log('Start failed: ' + e.message, true);
@@ -223,6 +188,9 @@
                 }
             }
         }
+        
+        // Attach click handler
+        document.getElementById('callBtn').addEventListener('click', handleCall);
         
         // Start initialization
         init();
