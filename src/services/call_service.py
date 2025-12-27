@@ -4,7 +4,7 @@ import requests
 from fastapi import HTTPException
 
 from src.config.settings import VapiSettings
-from src.models.domain.call import CallRequest, CallResponse
+from src.models.domain.call import CallRequest, CallResponse, TriggerCallRequest, WebCallConfigResponse, WebCallResponse
 from src.utils.helpers import handle_service_error
 
 logger = logging.getLogger(__name__)
@@ -25,6 +25,7 @@ class CallService:
             )
     
     async def make_call(self, call_data: CallRequest) -> CallResponse:
+        """Make an outbound call using the full Vapi request format."""
         try:
             request_data = {
                 "assistantId": call_data.assistant_id,
@@ -64,3 +65,79 @@ class CallService:
             raise HTTPException(status_code=status_code, detail=error_detail)
         except Exception as e:
             handle_service_error(e, "call_service", "make_call")
+
+    async def trigger_call(self, request: TriggerCallRequest) -> WebCallResponse:
+        """
+        Get configuration to trigger a web-based call.
+        The frontend uses this config with Vapi Web SDK to connect the user via browser.
+        
+        Returns all necessary information for the frontend to initiate the call.
+        """
+        try:
+            # Use provided values or fall back to defaults from settings
+            assistant_id = request.assistant_id or self.settings.default_assistant_id
+            
+            # Validate required fields
+            if not assistant_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="assistant_id is required. Either provide it in the request or set DEFAULT_ASSISTANT_ID in environment."
+                )
+            
+            if not self.settings.vapi_public_key:
+                raise HTTPException(
+                    status_code=400,
+                    detail="VAPI_PUBLIC_KEY is not configured. Set it in environment for web-based calls."
+                )
+
+            logger.info(f"Preparing web call config for assistant {assistant_id}")
+
+            # Return configuration for frontend to use with Vapi Web SDK
+            # The frontend will call: vapi.start({ assistantId: assistant_id, assistantOverrides: ... })
+            return WebCallResponse(
+                call_id="pending",  # Call ID will be generated when frontend starts the call
+                status="ready",
+                web_call_url=None,
+                transport={
+                    "provider": "vapi-web-sdk",
+                    "publicKey": self.settings.vapi_public_key,
+                    "assistantId": assistant_id,
+                    "assistantOverrides": request.assistant_overrides
+                }
+            )
+        except HTTPException:
+            raise
+        except Exception as e:
+            handle_service_error(e, "call_service", "trigger_call")
+
+    async def get_web_call_config(self) -> WebCallConfigResponse:
+        """
+        Get configuration for initiating a web-based call using Vapi Web SDK.
+        The frontend can use this config to connect the user directly through their browser.
+        
+        Usage on frontend:
+        1. Fetch this config
+        2. Use Vapi Web SDK: vapi.start({ assistantId: config.assistant_id })
+        """
+        try:
+            if not self.settings.vapi_public_key:
+                raise HTTPException(
+                    status_code=400,
+                    detail="VAPI_PUBLIC_KEY is not configured. Set it in environment for web-based calls."
+                )
+            
+            if not self.settings.default_assistant_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="DEFAULT_ASSISTANT_ID is not configured. Set it in environment."
+                )
+
+            return WebCallConfigResponse(
+                public_key=self.settings.vapi_public_key,
+                assistant_id=self.settings.default_assistant_id,
+                assistant_overrides=None  # Can be extended to include custom overrides
+            )
+        except HTTPException:
+            raise
+        except Exception as e:
+            handle_service_error(e, "call_service", "get_web_call_config")
