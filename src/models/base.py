@@ -7,8 +7,6 @@ Base = declarative_base()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# Support configurable database path via environment variable (for Docker)
-# Defaults to project root for local development
 DATA_DIR = os.environ.get("DATA_DIR", BASE_DIR)
 DATABASE_PATH = os.path.join(DATA_DIR, "database.db")
 DATABASE_URL = os.environ.get("DATABASE_URL", f"sqlite:///{DATABASE_PATH}")
