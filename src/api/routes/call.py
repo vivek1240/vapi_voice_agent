@@ -38,22 +38,42 @@ async def trigger_call(
     Trigger a web-based call - user connects to AI assistant via browser.
     
     Simply call this endpoint and the user can connect through their browser.
-    No phone number needed - this is for inbound web calls where the user
-    talks to the AI assistant through WebRTC.
+    No phone number needed - this is for web calls where the user
+    talks to the AI assistant through WebRTC in their browser.
     
-    Example payload (minimal - uses defaults):
+    **Example payloads:**
+    
+    Minimal (uses defaults from .env):
+    ```json
     {}
+    ```
     
-    Or with overrides:
+    With custom first message:
+    ```json
     {
-        "assistant_id": "your-assistant-id",
-        "assistant_overrides": {
-            "firstMessage": "Hello! How can I help you today?"
-        }
+        "first_message": "Hi! Welcome to customer support. How can I help?"
     }
+    ```
     
-    Returns connection details including web_call_url and transport config
-    that the frontend can use to connect the user to the call.
+    With model and voice overrides:
+    ```json
+    {
+        "model": {
+            "provider": "openai",
+            "model": "gpt-4o",
+            "temperature": 0.7
+        },
+        "voice": {
+            "provider": "11labs",
+            "voice_id": "sarah"
+        },
+        "first_message": "Hello! How can I assist you today?",
+        "system_prompt": "You are a helpful customer support agent."
+    }
+    ```
+    
+    Returns transport config that the frontend uses with Vapi Web SDK:
+    `vapi.start(assistantId, assistantOverrides)`
     """
     return await service.trigger_call(request)
 

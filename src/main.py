@@ -7,7 +7,7 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
-from src.api.routes import todo, reminder, calendar_event, call
+from src.api.routes import todo, reminder, calendar_event, call, webhook
 from src.models.database import create_tables
 
 logging.basicConfig(
@@ -41,6 +41,7 @@ app.include_router(todo.router)
 app.include_router(reminder.router)
 app.include_router(calendar_event.router)
 app.include_router(call.router)
+app.include_router(webhook.router)
 
 # Serve test page for web calls
 @app.get("/test-call")

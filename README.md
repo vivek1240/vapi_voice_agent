@@ -11,7 +11,8 @@ This project demonstrates how to build a structured API that handles todo lists,
 - **📝 Todo Management**: Create, list, complete, and delete todo items
 - **⏰ Reminders**: Set and manage reminders with importance levels
 - **📅 Calendar**: Schedule and track events with start and end times
-- **📞 Call Initiation**: Trigger outbound calls via Vapi AI API
+- **📞 Outbound Calls**: Trigger outbound calls to phone numbers via Vapi AI API
+- **🌐 Web-Based Calls**: Click-to-call feature for browser-based voice calls (no phone needed)
 - **🔄 Vapi AI Integration**: Process natural language commands into structured API calls
 - **🔧 Clean Architecture**: Follows best practices with proper separation of concerns
 
@@ -20,14 +21,14 @@ This project demonstrates how to build a structured API that handles todo lists,
 ### Prerequisites
 
 - Python 3.9+
-- Pip package manager
+- Pip package manager (or Conda)
 - Vapi AI account and API key (for call functionality)
 
 ### Installation
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/vwake09/vapi_voice_agent.git
+git clone https://github.com/vivek1240/vapi_voice_agent.git
 cd vapi_voice_agent
 ```
 
@@ -38,12 +39,20 @@ pip install -r requirements.txt
 
 3. Set up environment variables:
 ```bash
-# Copy the example environment file
-cp src/.env.example .env
-
-# Edit the .env file with your Vapi API key
-# Replace 'your_vapi_api_key_here' with your actual API key
+# Create .env file with your Vapi credentials
+cat > .env << EOF
+VAPI_API_KEY=your-api-key-here
+VAPI_PUBLIC_KEY=your-public-key-here
+DEFAULT_ASSISTANT_ID=your-assistant-id-here
+DEFAULT_PHONE_NUMBER_ID=your-phone-number-id-here
+EOF
 ```
+
+Get these values from your [Vapi Dashboard](https://dashboard.vapi.ai):
+- **VAPI_API_KEY**: Organization → API Keys (Private Key)
+- **VAPI_PUBLIC_KEY**: Organization → API Keys (Public Key)
+- **DEFAULT_ASSISTANT_ID**: Assistants → Select Assistant → Copy ID
+- **DEFAULT_PHONE_NUMBER_ID**: Phone Numbers → Select Number → Copy ID
 
 4. Run the application:
 ```bash
@@ -55,6 +64,19 @@ uvicorn src.main:app --reload
 http://localhost:8000/docs
 ```
 
+## 📞 Call Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/make_call/` | POST | Outbound call using Vapi tool call format |
+| `/trigger_call/` | POST | Web-based call (browser to AI assistant) |
+| `/web_call_config/` | GET | Get config for Vapi Web SDK |
+| `/test-call` | GET | Test page for web-based calls |
+
+### Test Web Calls
+
+Visit `http://localhost:8000/test-call` to test the web-based calling feature directly in your browser.
+
 ## 🔌 Vapi AI Integration
 
 This service is designed to work with Vapi AI's voice assistant platform. The integration enables:
@@ -63,6 +85,7 @@ This service is designed to work with Vapi AI's voice assistant platform. The in
 2. **Context Awareness**: Maintain conversation context for follow-up commands
 3. **Tool-Based Execution**: Execute specific functions based on user intent
 4. **Outbound Calls**: Initiate calls to customers using Vapi's telephony infrastructure
+5. **Web Calls**: Browser-based calls using Vapi Web SDK
 
 ### Example Voice Commands
 
@@ -79,4 +102,5 @@ This service is designed to work with Vapi AI's voice assistant platform. The in
 - **Uvicorn**: ASGI server for running the application
 - **SQLite**: Lightweight disk-based database
 - **Requests**: HTTP library for making API calls to Vapi
+- **Vapi Web SDK**: Browser-based voice call integration
 

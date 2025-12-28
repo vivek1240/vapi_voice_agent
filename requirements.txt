@@ -1,7 +1,13 @@
-# Core dependencies with exact versions
+# Core dependencies
 fastapi==0.115.12
 pydantic==2.11.4
 pydantic-settings==2.9.1
 sqlalchemy==2.0.41
 uvicorn==0.34.2
 requests==2.31.0
+
+# Groq LLM for call evaluations
+groq==1.0.0
+
+# Optional: For local webhook testing
+pyngrok==7.5.0

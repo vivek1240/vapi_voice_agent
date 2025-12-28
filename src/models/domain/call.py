@@ -9,10 +9,29 @@ class CallRequest(BaseModel):
     phone_number_id: str = Field(..., description="ID of the phone number to use")
     customer: CustomerInfo = Field(..., description="Customer information")
 
+class ModelConfig(BaseModel):
+    """LLM model configuration for assistant overrides."""
+    provider: str = Field("openai", description="LLM provider: openai, anthropic, google, groq, together-ai, deepseek")
+    model: str = Field("gpt-4o", description="Model name: gpt-4o, gpt-4o-mini, claude-3-opus, gemini-pro, etc.")
+    temperature: Optional[float] = Field(None, ge=0, le=2, description="Temperature (0-2)")
+
+class VoiceConfig(BaseModel):
+    """Voice configuration for assistant overrides."""
+    provider: str = Field("11labs", description="Voice provider: 11labs, playht, deepgram, azure, cartesia, openai")
+    voice_id: str = Field(..., description="Voice ID from the provider (e.g., 'sarah', 'burt' for 11labs)")
+
 class TriggerCallRequest(BaseModel):
     """Request for triggering a web-based call (user connects via browser)."""
     assistant_id: Optional[str] = Field(None, description="Override default assistant ID")
-    assistant_overrides: Optional[dict] = Field(None, description="Optional assistant configuration overrides")
+    
+    # Structured configuration (user-friendly)
+    model: Optional[ModelConfig] = Field(None, description="Override LLM model configuration")
+    voice: Optional[VoiceConfig] = Field(None, description="Override voice configuration")
+    first_message: Optional[str] = Field(None, description="First message the assistant says")
+    system_prompt: Optional[str] = Field(None, description="System prompt for the assistant")
+    
+    # Raw overrides (for advanced users who know Vapi format)
+    assistant_overrides: Optional[dict] = Field(None, description="Raw assistant overrides (advanced)")
 
 class WebCallConfigResponse(BaseModel):
     """Response containing configuration for Web SDK to initiate a browser-based call."""

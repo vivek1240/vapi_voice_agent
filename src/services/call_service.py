@@ -4,6 +4,7 @@ import requests
 from fastapi import HTTPException
 
 from src.config.settings import VapiSettings
+from src.config.call_config import get_call_config
 from src.models.domain.call import CallRequest, CallResponse, TriggerCallRequest, WebCallConfigResponse, WebCallResponse
 from src.utils.helpers import handle_service_error
 
@@ -71,9 +72,15 @@ class CallService:
         Get configuration to trigger a web-based call.
         The frontend uses this config with Vapi Web SDK to connect the user via browser.
         
-        Returns all necessary information for the frontend to initiate the call.
+        Priority order for configuration:
+        1. Per-call request values (highest priority)
+        2. Config file / environment defaults (CALL_* env vars)
+        3. Vapi dashboard assistant config (used when nothing is set)
         """
         try:
+            # Load call config defaults
+            call_config = get_call_config()
+            
             # Use provided values or fall back to defaults from settings
             assistant_id = request.assistant_id or self.settings.default_assistant_id
             
@@ -90,10 +97,57 @@ class CallService:
                     detail="VAPI_PUBLIC_KEY is not configured. Set it in environment for web-based calls."
                 )
 
+            # Build assistantOverrides - merge config defaults with request overrides
+            # Start with raw overrides if provided
+            assistant_overrides = dict(request.assistant_overrides) if request.assistant_overrides else {}
+            
+            # Determine effective values (request > config > None)
+            # Model configuration
+            model_provider = (request.model.provider if request.model else None) or call_config.model_provider
+            model_name = (request.model.model if request.model else None) or call_config.model_name
+            model_temp = (request.model.temperature if request.model else None) or call_config.model_temperature
+            
+            if model_provider and model_name:
+                model_config = {
+                    "provider": model_provider,
+                    "model": model_name,
+                }
+                if model_temp is not None:
+                    model_config["temperature"] = model_temp
+                assistant_overrides["model"] = model_config
+            
+            # Voice configuration
+            voice_provider = (request.voice.provider if request.voice else None) or call_config.voice_provider
+            voice_id = (request.voice.voice_id if request.voice else None) or call_config.voice_id
+            
+            if voice_provider and voice_id:
+                assistant_overrides["voice"] = {
+                    "provider": voice_provider,
+                    "voiceId": voice_id  # Note: camelCase for Vapi API
+                }
+            
+            # First message (request > config)
+            first_message = request.first_message or call_config.first_message
+            if first_message:
+                assistant_overrides["firstMessage"] = first_message
+            
+            # System prompt (request > config)
+            system_prompt = request.system_prompt or call_config.system_prompt
+            if system_prompt:
+                if "model" not in assistant_overrides:
+                    assistant_overrides["model"] = {}
+                assistant_overrides["model"]["messages"] = [
+                    {"role": "system", "content": system_prompt}
+                ]
+
             logger.info(f"Preparing web call config for assistant {assistant_id}")
+            if assistant_overrides:
+                logger.info(f"With overrides: {list(assistant_overrides.keys())}")
+            else:
+                logger.info("No overrides - using Vapi dashboard defaults")
 
             # Return configuration for frontend to use with Vapi Web SDK
-            # The frontend will call: vapi.start({ assistantId: assistant_id, assistantOverrides: ... })
+            # The frontend will call: vapi.start(assistantId, assistantOverrides)
             return WebCallResponse(
                 call_id="pending",  # Call ID will be generated when frontend starts the call
                 status="ready",
@@ -102,7 +156,7 @@ class CallService:
                     "provider": "vapi-web-sdk",
                     "publicKey": self.settings.vapi_public_key,
                     "assistantId": assistant_id,
-                    "assistantOverrides": request.assistant_overrides
+                    "assistantOverrides": assistant_overrides if assistant_overrides else None
                 }
             )
         except HTTPException:
