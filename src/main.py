@@ -37,9 +37,12 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(todo.router)
-app.include_router(reminder.router)
-app.include_router(calendar_event.router)
+# Hide TODO, Reminder, and Calendar Event endpoints from Swagger docs
+app.include_router(todo.router, include_in_schema=False)
+app.include_router(reminder.router, include_in_schema=False)
+app.include_router(calendar_event.router, include_in_schema=False)
+
+# Keep Call endpoints visible in Swagger
 app.include_router(call.router)
 app.include_router(webhook.router)
 

@@ -6,8 +6,10 @@ import os
 Base = declarative_base()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-DATABASE_PATH = os.path.join(BASE_DIR, "database.db")
-DATABASE_URL = f"sqlite:///{DATABASE_PATH}"
+
+DATA_DIR = os.environ.get("DATA_DIR", BASE_DIR)
+DATABASE_PATH = os.path.join(DATA_DIR, "database.db")
+DATABASE_URL = os.environ.get("DATABASE_URL", f"sqlite:///{DATABASE_PATH}")
 
 engine = create_engine(DATABASE_URL, connect_args={'check_same_thread': False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

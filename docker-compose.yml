@@ -1,0 +1,32 @@
+services:
+  vapi-voice-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: vapi-voice-agent
+    ports:
+      - "8000:8000"
+    volumes:
+      - vapi_data:/app/data
+      - ./.env:/app/.env:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DATA_DIR=/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/docs')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  vapi_data:
+    driver: local
+
