@@ -1,6 +1,6 @@
 {
   "message": {
-    "timestamp": 1766912932503,
+    "timestamp": 1766918924309,
     "type": "status-update",
     "status": "in-progress",
     "artifact": {
@@ -8,7 +8,7 @@
         {
           "role": "system",
           "message": "# Mercola Health Coach - Voice AI Customer Support Agent\n## IDENTITY\n\nYou are **Vivek**, the Voice AI Customer Support Agent for **Mercola Health Coach** app by MHC Health Management Solutions, LLC. Help users understand the app, navigate onboarding, and resolve queries about consents and features.\n\n---\n\n## VOICE STYLE\n\n- **Tone:** Warm, patient, professional\n- **Pace:** Moderate, clear, natural pauses\n- **Language:** Simple, conversational, no jargon\n- **Empathy:** Acknowledge frustration, celebrate progress, stay calm\n \n---\n\n## CONVERSATION TEMPLATES\n\n**Opening:** \"Hi! Welcome to Mercola Health Coach support. I'm Mia, your virtual assistant. How can I help you today?\"\n\n**Clarification:** \"Just to make sure I understand\u2014are you asking about [A] or [B]?\"\n\n**Closing:** \"Is there anything else I can help with?\" \u2192 \"Great! Thanks for reaching out. Take care!\"\n\n**Didn't understand:** \"I'm sorry, I didn't catch that. Could you repeat your question?\"\n\n**User frustrated:** \"I hear your frustra...",
-          "time": 1766912927218,
+          "time": 1766918920238,
           "secondsFromStart": 0
         }
       ],
@@ -20,15 +20,15 @@
       ]
     },
     "call": {
-      "id": "019b6437-a30a-7333-9f59-6d659e510a1d",
+      "id": "019b6493-15e7-7995-8abc-4f5b5f18b424",
       "orgId": "43247586-b54e-423f-8bb1-5181c24816ac",
-      "createdAt": "2025-12-28T09:08:46.474Z",
-      "updatedAt": "2025-12-28T09:08:46.474Z",
+      "createdAt": "2025-12-28T10:48:39.655Z",
+      "updatedAt": "2025-12-28T10:48:39.655Z",
       "type": "webCall",
       "cost": 0,
       "monitor": {
-        "listenUrl": "wss://phone-call-websocket.oci-us-sanjose-1-backend-production3.vapi.ai/019b6437-a30a-7333-9f59-6d659e510a1d/listen",
-        "controlUrl": "https://phone-call-websocket.oci-us-sanjose-1-backend-production3.vapi.ai/019b6437-a30a-7333-9f59-6d659e510a1d/control"
+        "listenUrl": "wss://phone-call-websocket.oci-us-sanjose-1-backend-production3.vapi.ai/019b6493-15e7-7995-8abc-4f5b5f18b424/listen",
+        "controlUrl": "https://phone-call-websocket.oci-us-sanjose-1-backend-production3.vapi.ai/019b6493-15e7-7995-8abc-4f5b5f18b424/control"
       },
       "transport": {
         "conversationType": "voice",
@@ -36,9 +36,9 @@
         "videoRecordingEnabled": false,
         "assistantVideoEnabled": false,
         "roomDeleteOnUserLeaveEnabled": true,
-        "callUrl": "https://vapi.daily.co/QP9gCfjhgCAre214Kmv4"
+        "callUrl": "https://vapi.daily.co/D5mAYXw5EwBNFEr8i1KE"
       },
-      "webCallUrl": "https://vapi.daily.co/QP9gCfjhgCAre214Kmv4",
+      "webCallUrl": "https://vapi.daily.co/D5mAYXw5EwBNFEr8i1KE",
       "status": "queued",
       "assistantId": "1f97450a-9d2f-4e39-8948-02582a67274b"
     },

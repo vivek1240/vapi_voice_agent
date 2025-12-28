@@ -772,7 +772,11 @@
                 await new Promise(r => setTimeout(r, pollDelay));
                 
                 try {
-                    const res = await fetch('/webhook/call-logs');
+                    const res = await fetch('/webhook/call-logs', {
+                        headers: {
+                            'ngrok-skip-browser-warning': 'true'
+                        }
+                    });
                     const data = await res.json();
                     
                     if (data.calls && data.calls.length > 0) {
@@ -791,12 +795,11 @@
                             );
                             const latest = sortedCalls[0];
                             
-                            // Only accept if it's very recent (within 2 minutes)
-                            const callTime = new Date(latest.timestamp);
-                            const now = new Date();
-                            const timeDiff = (now - callTime) / 1000 / 60;
+                            console.log('Latest call:', latest);
+                            console.log('Has summary:', !!latest.call_summary);
                             
-                            if ((latest.user_sentiment || latest.call_summary) && timeDiff < 2) {
+                            // Accept if it has a summary (our evaluation ran)
+                            if (latest.call_summary) {
                                 log('Found recent evaluation!', 'success');
                                 displayEvaluation(latest);
                                 return;
@@ -876,7 +879,10 @@
             try {
                 const res = await fetch('/trigger_call/', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'ngrok-skip-browser-warning': 'true'
+                    },
                     body: JSON.stringify({})
                 });
                 config = await res.json();
@@ -896,13 +902,24 @@
                 vapi = new Vapi(config.transport.publicKey);
                 
                 vapi.on('call-start', (callData) => {
-                    // Capture the call ID from Vapi
-                    currentCallId = callData?.call?.id || callData?.callId || null;
+                    // Debug: log full event data to console
+                    console.log('call-start event data:', JSON.stringify(callData, null, 2));
+                    
+                    // Try multiple paths to get call ID (Vapi SDK structure varies)
+                    currentCallId = callData?.id || callData?.call?.id || callData?.callId || null;
                     log(`Call started (ID: ${currentCallId || 'unknown'})`, 'success');
                     setCallState('active');
                 });
                 
-                vapi.on('call-end', () => {
+                vapi.on('call-end', (endData) => {
+                    // Try to capture call ID from end event if we didn't get it from start
+                    console.log('call-end event data:', JSON.stringify(endData, null, 2));
+                    if (!currentCallId && endData) {
+                        currentCallId = endData?.id || endData?.call?.id || endData?.callId || null;
+                        if (currentCallId) {
+                            log(`Got call ID from end event: ${currentCallId}`, 'info');
+                        }
+                    }
                     log('Call ended - waiting for webhook processing...', 'info');
                     setCallState('ended');
                     // Wait 5 seconds before polling - webhook needs time to process

@@ -1,192 +1,260 @@
 {
   "message": {
-    "timestamp": 1766912973904,
+    "timestamp": 1766918977885,
     "type": "speech-update",
     "status": "started",
     "role": "assistant",
-    "turn": 3,
+    "turn": 4,
     "artifact": {
       "messages": [
         {
           "role": "system",
           "message": "# Mercola Health Coach - Voice AI Customer Support Agent\n## IDENTITY\n\nYou are **Vivek**, the Voice AI Customer Support Agent for **Mercola Health Coach** app by MHC Health Management Solutions, LLC. Help users understand the app, navigate onboarding, and resolve queries about consents and features.\n\n---\n\n## VOICE STYLE\n\n- **Tone:** Warm, patient, professional\n- **Pace:** Moderate, clear, natural pauses\n- **Language:** Simple, conversational, no jargon\n- **Empathy:** Acknowledge frustration, celebrate progress, stay calm\n \n---\n\n## CONVERSATION TEMPLATES\n\n**Opening:** \"Hi! Welcome to Mercola Health Coach support. I'm Mia, your virtual assistant. How can I help you today?\"\n\n**Clarification:** \"Just to make sure I understand\u2014are you asking about [A] or [B]?\"\n\n**Closing:** \"Is there anything else I can help with?\" \u2192 \"Great! Thanks for reaching out. Take care!\"\n\n**Didn't understand:** \"I'm sorry, I didn't catch that. Could you repeat your question?\"\n\n**User frustrated:** \"I hear your frustra...",
-          "time": 1766912927218,
+          "time": 1766918920238,
           "secondsFromStart": 0
         },
         {
           "role": "bot",
           "message": "Hi there. Welcome to Mercola Health Coach support. I'm Vivek, your virtual assistant. I can help you understand the app, you through the onboarding process, or answer any questions you have. How can I help you today?",
-          "time": 1766912928764,
-          "endTime": 1766912941414,
-          "secondsFromStart": 1.2,
-          "duration": 10480.000244140625,
+          "time": 1766918921887,
+          "endTime": 1766918934517,
+          "secondsFromStart": 1.44,
+          "duration": 10480,
           "source": ""
         },
         {
           "role": "user",
-          "message": "Yeah. Hi, Vivek. How are you doing?",
-          "time": 1766912942604,
-          "endTime": 1766912944124,
-          "secondsFromStart": 15.04,
-          "duration": 1520,
+          "message": "Hey. Hi, Vivek. How are you doing, first of all?",
+          "time": 1766918935547,
+          "endTime": 1766918938347,
+          "secondsFromStart": 15.1,
+          "duration": 2800,
           "metadata": {
             "wordLevelConfidence": [
               {
-                "word": "yeah",
-                "start": 15.04,
-                "end": 15.36,
-                "confidence": 0.7663574,
-                "punctuated_word": "Yeah."
+                "word": "hey",
+                "start": 15.1,
+                "end": 15.5,
+                "confidence": 0.9892578,
+                "punctuated_word": "Hey."
               },
               {
                 "word": "hi",
-                "start": 15.36,
-                "end": 15.6,
-                "confidence": 0.9794922,
+                "start": 15.5,
+                "end": 15.740001,
+                "confidence": 0.9946289,
                 "punctuated_word": "Hi,"
               },
               {
                 "word": "vivek",
-                "start": 15.6,
-                "end": 16,
-                "confidence": 0.9890137,
+                "start": 15.740001,
+                "end": 16.46,
+                "confidence": 0.99316406,
                 "punctuated_word": "Vivek."
               },
               {
                 "word": "how",
-                "start": 16,
-                "end": 16.16,
-                "confidence": 1,
+                "start": 16.62,
+                "end": 16.86,
+                "confidence": 0.99902344,
                 "punctuated_word": "How"
               },
               {
                 "word": "are",
-                "start": 16.16,
-                "end": 16.24,
-                "confidence": 0.9819336,
+                "start": 16.86,
+                "end": 17.02,
+                "confidence": 0.88183594,
                 "punctuated_word": "are"
               },
               {
                 "word": "you",
-                "start": 16.24,
-                "end": 16.32,
-                "confidence": 0.9921875,
+                "start": 17.02,
+                "end": 17.1,
+                "confidence": 1,
                 "punctuated_word": "you"
               },
               {
                 "word": "doing",
-                "start": 16.32,
-                "end": 16.56,
-                "confidence": 0.9980469,
-                "punctuated_word": "doing?"
+                "start": 17.1,
+                "end": 17.5,
+                "confidence": 0.77246094,
+                "punctuated_word": "doing,"
+              },
+              {
+                "word": "first",
+                "start": 17.5,
+                "end": 17.66,
+                "confidence": 1,
+                "punctuated_word": "first"
+              },
+              {
+                "word": "of",
+                "start": 17.66,
+                "end": 17.82,
+                "confidence": 1,
+                "punctuated_word": "of"
+              },
+              {
+                "word": "all",
+                "start": 17.82,
+                "end": 17.9,
+                "confidence": 0.9880371,
+                "punctuated_word": "all?"
               }
             ]
           }
         },
         {
           "role": "bot",
-          "message": "Hi. I'm doing well. Thanks for asking. How can I help you with the Mercola Health Coach app? Today?",
-          "time": 1766912945934,
-          "endTime": 1766912951683.999,
-          "secondsFromStart": 18.37,
+          "message": "Hi. Thanks for asking. I'm doing well. And I'm here to help. What can I help you with in the Mercola Health Coach app? Today? Onboarding consents, permissions, notification",
+          "time": 1766918940556.999,
+          "endTime": 1766918951077.001,
+          "secondsFromStart": 20.1099990234375,
+          "duration": 9440.0009765625,
+          "source": ""
+        },
+        {
+          "role": "user",
+          "message": "Yeah. I'm good. We can keep the call. Thank you.",
+          "time": 1766918950857,
+          "endTime": 1766918954017,
+          "secondsFromStart": 30.41,
+          "duration": 2160,
+          "metadata": {
+            "wordLevelConfidence": [
+              {
+                "word": "yeah",
+                "start": 30.41,
+                "end": 30.73,
+                "confidence": 0.954834,
+                "punctuated_word": "Yeah."
+              }
+            ]
+          }
+        },
+        {
+          "role": "bot",
+          "message": "Of course. Glad to stay on with you. What would you like help with in the Merkola Health Coach",
+          "time": 1766918955677,
+          "endTime": 1766918961276.998,
+          "secondsFromStart": 35.23,
           "duration": 4959.998046875,
           "source": ""
         },
         {
           "role": "user",
-          "message": "I'm good. It's just I'm just frustrated in my head. But thank you so much. I don't have any questions. Bye bye.",
-          "time": 1766912953944.001,
-          "endTime": 1766912960124,
-          "secondsFromStart": 26.3800009765625,
-          "duration": 5359.9990234375,
+          "message": "Nothing yet. Just keep the call.",
+          "time": 1766918960367,
+          "endTime": 1766918963097,
+          "secondsFromStart": 39.92,
+          "duration": 1519.998046875,
           "metadata": {
             "wordLevelConfidence": [
               {
-                "word": "i'm",
-                "start": 26.380001,
-                "end": 26.78,
-                "confidence": 0.9707031,
-                "punctuated_word": "I'm"
+                "word": "nothing",
+                "start": 39.92,
+                "end": 40.32,
+                "confidence": 0.9140625,
+                "punctuated_word": "Nothing"
               },
               {
-                "word": "good",
-                "start": 26.78,
-                "end": 27.18,
-                "confidence": 1,
-                "punctuated_word": "good."
-              },
-              {
-                "word": "it's",
-                "start": 27.18,
-                "end": 27.5,
-                "confidence": 0.9995117,
-                "punctuated_word": "It's"
-              },
-              {
-                "word": "just",
-                "start": 27.5,
-                "end": 27.66,
-                "confidence": 1,
-                "punctuated_word": "just"
-              },
-              {
-                "word": "i'm",
-                "start": 27.82,
-                "end": 27.98,
-                "confidence": 1,
-                "punctuated_word": "I'm"
-              },
-              {
-                "word": "just",
-                "start": 27.98,
-                "end": 28.14,
-                "confidence": 1,
-                "punctuated_word": "just"
-              },
-              {
-                "word": "frustrated",
-                "start": 28.14,
-                "end": 28.62,
-                "confidence": 1,
-                "punctuated_word": "frustrated"
-              },
-              {
-                "word": "in",
-                "start": 28.62,
-                "end": 28.94,
-                "confidence": 0.99902344,
-                "punctuated_word": "in"
-              },
-              {
-                "word": "my",
-                "start": 28.94,
-                "end": 29.1,
-                "confidence": 1,
-                "punctuated_word": "my"
-              },
-              {
-                "word": "head",
-                "start": 29.1,
-                "end": 29.34,
-                "confidence": 0.90966797,
-                "punctuated_word": "head."
+                "word": "yet",
+                "start": 40.32,
+                "end": 40.559998,
+                "confidence": 0.80078125,
+                "punctuated_word": "yet."
               }
             ]
           }
         },
         {
           "role": "bot",
-          "message": "Thanks for calling. Um, I'm sorry you're feeling frustrated.",
-          "time": 1766912962314,
-          "endTime": 1766912965033.997,
-          "secondsFromStart": 34.75,
-          "duration": 2719.9970703125,
+          "message": "I can stay with you for a moment. Are you currently on a specific screen in",
+          "time": 1766918966357,
+          "endTime": 1766918970987,
+          "secondsFromStart": 45.91,
+          "duration": 3679.9970703125,
           "source": ""
+        },
+        {
+          "role": "user",
+          "message": "End the call. End the call. End the call.",
+          "time": 1766918970247,
+          "endTime": 1766918972567,
+          "secondsFromStart": 49.8,
+          "duration": 2320,
+          "metadata": {
+            "wordLevelConfidence": [
+              {
+                "word": "end",
+                "start": 49.8,
+                "end": 50.12,
+                "confidence": 0.14196777,
+                "punctuated_word": "End"
+              },
+              {
+                "word": "the",
+                "start": 50.12,
+                "end": 50.36,
+                "confidence": 0.9350586,
+                "punctuated_word": "the"
+              },
+              {
+                "word": "call",
+                "start": 50.36,
+                "end": 50.76,
+                "confidence": 0.95654297,
+                "punctuated_word": "call."
+              },
+              {
+                "word": "end",
+                "start": 50.76,
+                "end": 50.92,
+                "confidence": 0.9453125,
+                "punctuated_word": "End"
+              },
+              {
+                "word": "the",
+                "start": 50.92,
+                "end": 51.08,
+                "confidence": 0.99902344,
+                "punctuated_word": "the"
+              },
+              {
+                "word": "call",
+                "start": 51.08,
+                "end": 51.56,
+                "confidence": 0.984375,
+                "punctuated_word": "call."
+              },
+              {
+                "word": "end",
+                "start": 51.56,
+                "end": 51.72,
+                "confidence": 0.85498047,
+                "punctuated_word": "End"
+              },
+              {
+                "word": "the",
+                "start": 51.72,
+                "end": 51.88,
+                "confidence": 0.9970703,
+                "punctuated_word": "the"
+              },
+              {
+                "word": "call",
+                "start": 51.88,
+                "end": 52.12,
+                "confidence": 0.9914551,
+                "punctuated_word": "call."
+              }
+            ]
+          }
         },
         {
           "toolCalls": [
             {
-              "id": "call_QECvEmTwkIq0UnPkPVZ0kTrC",
+              "id": "call_GgIVsw0Mktx3dmsMrRySJQaC",
               "type": "function",
               "function": {
                 "name": "end_call_tool",
@@ -196,8 +264,8 @@
           ],
           "role": "tool_calls",
           "message": "",
-          "time": 1766912966251,
-          "secondsFromStart": 38.687
+          "time": 1766918977850,
+          "secondsFromStart": 57.403
         }
       ],
       "messagesOpenAIFormatted": [
@@ -211,22 +279,37 @@
         },
         {
           "role": "user",
-          "content": "Yeah. Hi, Vivek. How are you doing?"
+          "content": "Hey. Hi, Vivek. How are you doing, first of all?"
         },
         {
           "role": "assistant",
-          "content": "Hi. I'm doing well. Thanks for asking. How can I help you with the Mercola Health Coach app? Today?"
+          "content": "Hi. Thanks for asking. I'm doing well. And I'm here to help. What can I help you with in the Mercola Health Coach app? Today? Onboarding consents, permissions, notification"
         },
         {
           "role": "user",
-          "content": "I'm good. It's just I'm just frustrated in my head. But thank you so much. I don't have any questions. Bye bye."
+          "content": "Yeah. I'm good. We can keep the call. Thank you."
         },
         {
           "role": "assistant",
-          "content": "Thanks for calling. Um, I'm sorry you're feeling frustrated.",
+          "content": "Of course. Glad to stay on with you. What would you like help with in the Merkola Health Coach"
+        },
+        {
+          "role": "user",
+          "content": "Nothing yet. Just keep the call."
+        },
+        {
+          "role": "assistant",
+          "content": "I can stay with you for a moment. Are you currently on a specific screen in"
+        },
+        {
+          "role": "user",
+          "content": "End the call. End the call. End the call."
+        },
+        {
+          "role": "assistant",
           "tool_calls": [
             {
-              "id": "call_QECvEmTwkIq0UnPkPVZ0kTrC",
+              "id": "call_GgIVsw0Mktx3dmsMrRySJQaC",
               "type": "function",
               "function": {
                 "name": "end_call_tool",
@@ -237,21 +320,21 @@
         },
         {
           "role": "tool",
-          "tool_call_id": "call_QECvEmTwkIq0UnPkPVZ0kTrC",
+          "tool_call_id": "call_GgIVsw0Mktx3dmsMrRySJQaC",
           "content": "Tool Result Still Pending But Proceed Further If Possible."
         }
       ]
     },
     "call": {
-      "id": "019b6437-a30a-7333-9f59-6d659e510a1d",
+      "id": "019b6493-15e7-7995-8abc-4f5b5f18b424",
       "orgId": "43247586-b54e-423f-8bb1-5181c24816ac",
-      "createdAt": "2025-12-28T09:08:46.474Z",
-      "updatedAt": "2025-12-28T09:08:46.474Z",
+      "createdAt": "2025-12-28T10:48:39.655Z",
+      "updatedAt": "2025-12-28T10:48:39.655Z",
       "type": "webCall",
       "cost": 0,
       "monitor": {
-        "listenUrl": "wss://phone-call-websocket.oci-us-sanjose-1-backend-production3.vapi.ai/019b6437-a30a-7333-9f59-6d659e510a1d/listen",
-        "controlUrl": "https://phone-call-websocket.oci-us-sanjose-1-backend-production3.vapi.ai/019b6437-a30a-7333-9f59-6d659e510a1d/control"
+        "listenUrl": "wss://phone-call-websocket.oci-us-sanjose-1-backend-production3.vapi.ai/019b6493-15e7-7995-8abc-4f5b5f18b424/listen",
+        "controlUrl": "https://phone-call-websocket.oci-us-sanjose-1-backend-production3.vapi.ai/019b6493-15e7-7995-8abc-4f5b5f18b424/control"
       },
       "transport": {
         "conversationType": "voice",
@@ -259,9 +342,9 @@
         "videoRecordingEnabled": false,
         "assistantVideoEnabled": false,
         "roomDeleteOnUserLeaveEnabled": true,
-        "callUrl": "https://vapi.daily.co/QP9gCfjhgCAre214Kmv4"
+        "callUrl": "https://vapi.daily.co/D5mAYXw5EwBNFEr8i1KE"
       },
-      "webCallUrl": "https://vapi.daily.co/QP9gCfjhgCAre214Kmv4",
+      "webCallUrl": "https://vapi.daily.co/D5mAYXw5EwBNFEr8i1KE",
       "status": "queued",
       "assistantId": "1f97450a-9d2f-4e39-8948-02582a67274b"
     },
