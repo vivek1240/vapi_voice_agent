@@ -50,9 +50,9 @@ app.include_router(webhook.router)
 @app.get("/test-call")
 async def test_call_page():
     """Serve the web call test page"""
-    import os
-    html_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "test_web_call.html")
-    return FileResponse(html_path, media_type="text/html")
+    from pathlib import Path
+    html_path = Path(__file__).resolve().parent.parent / "test_web_call.html"
+    return FileResponse(str(html_path), media_type="text/html")
 
 if __name__ == "__main__":
     uvicorn.run("src.main:app", host="0.0.0.0", port=8000, reload=True)
