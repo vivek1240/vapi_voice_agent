@@ -25,7 +25,8 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 COPY --chown=appuser:appuser . .
 
-RUN mkdir -p /app/data && chown -R appuser:appuser /app/data
+RUN mkdir -p /app/data && chown -R appuser:appuser /app/data && \
+    chmod +x /app/start.sh
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -33,6 +34,6 @@ ENV PYTHONUNBUFFERED=1 \
 
 USER appuser
 
-# Railway sets PORT dynamically
-CMD ["/bin/sh", "-c", "uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+# Use start script for proper PORT expansion
+ENTRYPOINT ["/bin/sh", "/app/start.sh"]
 
