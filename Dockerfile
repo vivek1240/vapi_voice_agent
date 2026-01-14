@@ -33,8 +33,6 @@ ENV PYTHONUNBUFFERED=1 \
 
 USER appuser
 
-# Railway sets PORT dynamically - default to 8000 for local development
-ENV PORT=8000
-
-CMD uvicorn src.main:app --host 0.0.0.0 --port $PORT
+# Railway sets PORT dynamically
+CMD ["/bin/sh", "-c", "uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
 
