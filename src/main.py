@@ -54,5 +54,13 @@ async def test_call_page():
     html_path = Path(__file__).resolve().parent.parent / "test_web_call.html"
     return FileResponse(str(html_path), media_type="text/html")
 
+@app.get("/bestbuy")
+@app.get("/")
+async def bestbuy_page():
+    """Serve the Best Buy Adaptor Support page"""
+    from pathlib import Path
+    html_path = Path(__file__).resolve().parent.parent / "test_web_call_bestbuy.html"
+    return FileResponse(str(html_path), media_type="text/html")
+
 if __name__ == "__main__":
     uvicorn.run("src.main:app", host="0.0.0.0", port=8000, reload=True)
