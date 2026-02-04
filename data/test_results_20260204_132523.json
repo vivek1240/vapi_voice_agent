@@ -1,0 +1,32 @@
+[
+  {
+    "name": "tv_display_resolved",
+    "success": false,
+    "error": "Evaluation returned None"
+  },
+  {
+    "name": "physical_damage_geeksquad",
+    "success": false,
+    "error": "Evaluation returned None"
+  },
+  {
+    "name": "wifi_frustrated_resolved",
+    "success": false,
+    "error": "Evaluation returned None"
+  },
+  {
+    "name": "return_request",
+    "success": false,
+    "error": "Evaluation returned None"
+  },
+  {
+    "name": "angry_customer_unresolved",
+    "success": false,
+    "error": "Evaluation returned None"
+  },
+  {
+    "name": "bluetooth_headphones",
+    "success": false,
+    "error": "Evaluation returned None"
+  }
+]

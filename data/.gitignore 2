@@ -1,0 +1,7 @@
+# Ignore all CSV files (contains call data)
+*.csv
+
+# Keep this directory in git
+!.gitkeep
+!.gitignore
+

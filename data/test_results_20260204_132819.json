@@ -1,0 +1,98 @@
+[
+  {
+    "name": "tv_display_resolved",
+    "success": true,
+    "evaluation": {
+      "user_sentiment": "positive",
+      "call_summary": "The customer's Samsung TV had no picture but had audio, and after basic troubleshooting steps, including a soft reset, the issue was resolved. The customer was satisfied with the outcome.",
+      "query_resolved": true,
+      "escalation_required": false,
+      "issue_category": "display_visual",
+      "product_category": "tv_display",
+      "resolution_path": "virtual_resolved",
+      "troubleshooting_tier": "tier_1_basic",
+      "first_call_resolution": true,
+      "proper_diagnosis": true
+    }
+  },
+  {
+    "name": "physical_damage_geeksquad",
+    "success": true,
+    "evaluation": {
+      "user_sentiment": "neutral",
+      "call_summary": "The customer's iPhone screen is cracked and won't turn on after being dropped. The agent determined that the issue requires hands-on attention and recommended the customer visit a Best Buy with Geek Squad services for diagnosis and repair under their Protection Plan.",
+      "query_resolved": true,
+      "escalation_required": false,
+      "issue_category": "physical_damage",
+      "product_category": "smartphone_tablet",
+      "resolution_path": "in_person_geeksquad",
+      "troubleshooting_tier": "tier_1_basic",
+      "first_call_resolution": false,
+      "proper_diagnosis": true
+    }
+  },
+  {
+    "name": "wifi_frustrated_resolved",
+    "success": true,
+    "evaluation": {
+      "user_sentiment": "frustrated",
+      "call_summary": "The customer had trouble connecting their new LG 55-inch smart TV to Wi-Fi. The agent walked them through troubleshooting steps, including resetting the TV's network settings, which resolved the issue. The customer was initially frustrated but satisfied with the outcome.",
+      "query_resolved": true,
+      "escalation_required": false,
+      "issue_category": "wifi_network",
+      "product_category": "tv_display",
+      "resolution_path": "virtual_resolved",
+      "troubleshooting_tier": "tier_1_basic",
+      "first_call_resolution": true,
+      "proper_diagnosis": true
+    }
+  },
+  {
+    "name": "return_request",
+    "success": true,
+    "evaluation": {
+      "user_sentiment": "neutral",
+      "call_summary": "The customer wanted to return a laptop due to its slow performance for video editing software. The agent guided the customer through the return process and provided recommendations for laptops better suited for video editing.",
+      "query_resolved": true,
+      "escalation_required": false,
+      "issue_category": "slow_performance",
+      "product_category": "computer_laptop",
+      "resolution_path": "in_person_store",
+      "troubleshooting_tier": "not_applicable",
+      "first_call_resolution": false,
+      "proper_diagnosis": true
+    }
+  },
+  {
+    "name": "angry_customer_unresolved",
+    "success": true,
+    "evaluation": {
+      "user_sentiment": "angry",
+      "call_summary": "The customer is experiencing issues with their washing machine, specifically with drainage, and is extremely dissatisfied with the lack of resolution after multiple calls. The agent offers to escalate the issue to a priority service team or check return eligibility, but the customer requests to speak with a manager.",
+      "query_resolved": false,
+      "escalation_required": true,
+      "issue_category": "hardware_failure",
+      "product_category": "home_appliance",
+      "resolution_path": "in_person_geeksquad",
+      "troubleshooting_tier": "not_applicable",
+      "first_call_resolution": false,
+      "proper_diagnosis": true
+    }
+  },
+  {
+    "name": "bluetooth_headphones",
+    "success": true,
+    "evaluation": {
+      "user_sentiment": "positive",
+      "call_summary": "The customer had trouble pairing their Sony WH-1000XM5 headphones with their iPhone. The agent guided them through the pairing process, and the issue was resolved successfully.",
+      "query_resolved": true,
+      "escalation_required": false,
+      "issue_category": "bluetooth_pairing",
+      "product_category": "audio_equipment",
+      "resolution_path": "virtual_resolved",
+      "troubleshooting_tier": "tier_1_basic",
+      "first_call_resolution": true,
+      "proper_diagnosis": true
+    }
+  }
+]

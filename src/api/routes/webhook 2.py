@@ -15,7 +15,7 @@ from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import JSONResponse
 
 from src.services.call_logger import get_call_logger
-from src.services.bestbuy_call_evaluator import get_bestbuy_call_evaluator
+from src.services.call_evaluator import get_call_evaluator
 from src.models.domain.webhook import CallLogEntry
 
 logger = logging.getLogger(__name__)
@@ -115,34 +115,23 @@ async def vapi_webhook(request: Request):
             
             if transcript:
                 try:
-                    evaluator = get_bestbuy_call_evaluator()
+                    evaluator = get_call_evaluator()
                     if evaluator.is_available():
-                        logger.info("🤖 Running Best Buy LLM evaluation on transcript...")
+                        logger.info("🤖 Running LLM evaluation on transcript...")
                         evaluation = evaluator.evaluate(transcript)
                         
                         if evaluation:
-                            # Best Buy evaluation has 10 dimensions
                             parsed_outputs = {
                                 "user_sentiment": evaluation.user_sentiment.value,
                                 "call_summary": evaluation.call_summary,
-                                "issue_category": evaluation.issue_category.value,
-                                "product_category": evaluation.product_category.value,
-                                "resolution_path": evaluation.resolution_path.value,
-                                "troubleshooting_tier": evaluation.troubleshooting_tier.value,
-                                "first_call_resolution": evaluation.first_call_resolution,
+                                "query_category": evaluation.query_category.value,
                                 "escalation_required": evaluation.escalation_required,
-                                "query_resolved": evaluation.query_resolved,
-                                "proper_diagnosis": evaluation.proper_diagnosis
+                                "query_resolved": evaluation.query_resolved
                             }
                             logger.info(f"  📊 Sentiment: {evaluation.user_sentiment.value}")
-                            logger.info(f"  📊 Issue: {evaluation.issue_category.value}")
-                            logger.info(f"  📊 Product: {evaluation.product_category.value}")
-                            logger.info(f"  📊 Resolution: {evaluation.resolution_path.value}")
-                            logger.info(f"  📊 Tier: {evaluation.troubleshooting_tier.value}")
-                            logger.info(f"  📊 FCR: {evaluation.first_call_resolution}")
+                            logger.info(f"  📊 Category: {evaluation.query_category.value}")
                             logger.info(f"  📊 Resolved: {evaluation.query_resolved}")
                             logger.info(f"  📊 Escalation: {evaluation.escalation_required}")
-                            logger.info(f"  📊 Diagnosis: {evaluation.proper_diagnosis}")
                         else:
                             logger.warning("LLM evaluation returned None")
                     else:
@@ -161,34 +150,29 @@ async def vapi_webhook(request: Request):
             try:
                 call_logger = get_call_logger()
                 
-                # Handle boolean conversions
-                def to_bool(val):
-                    if isinstance(val, bool):
-                        return val
-                    if isinstance(val, str):
-                        return val.lower() == "true"
-                    return None
+                # Handle boolean conversions for escalation/resolved
+                escalation = parsed_outputs.get("escalation_required")
+                if isinstance(escalation, str):
+                    escalation = escalation.lower() == "true"
+                
+                resolved = parsed_outputs.get("query_resolved")
+                if isinstance(resolved, str):
+                    resolved = resolved.lower() == "true"
                 
                 # Get duration and cost from message level (end-of-call-report)
                 duration = message.get("durationSeconds")
                 cost = message.get("cost")
                 recording_url = artifact.get("recordingUrl") or message.get("recordingUrl")
                 
-                # Best Buy CallLogEntry with 10 dimensions
                 entry = CallLogEntry(
                     call_id=call_id,
                     timestamp=datetime.now().isoformat(),
                     duration_seconds=duration,
                     user_sentiment=parsed_outputs.get("user_sentiment"),
                     call_summary=parsed_outputs.get("call_summary"),
-                    issue_category=parsed_outputs.get("issue_category"),
-                    product_category=parsed_outputs.get("product_category"),
-                    resolution_path=parsed_outputs.get("resolution_path"),
-                    troubleshooting_tier=parsed_outputs.get("troubleshooting_tier"),
-                    first_call_resolution=to_bool(parsed_outputs.get("first_call_resolution")),
-                    escalation_required=to_bool(parsed_outputs.get("escalation_required")),
-                    query_resolved=to_bool(parsed_outputs.get("query_resolved")),
-                    proper_diagnosis=to_bool(parsed_outputs.get("proper_diagnosis")),
+                    query_category=parsed_outputs.get("query_category"),
+                    escalation_required=escalation,
+                    query_resolved=resolved,
                     transcript=transcript[:5000] if transcript else None,
                     recording_url=recording_url,
                     cost=cost

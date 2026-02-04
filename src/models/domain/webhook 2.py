@@ -173,21 +173,15 @@ class VapiWebhookPayload(BaseModel):
 
 
 class CallLogEntry(BaseModel):
-    """Entry for CSV logging - Best Buy evaluation with 10 dimensions."""
+    """Entry for CSV logging."""
     call_id: str
     timestamp: str
     duration_seconds: Optional[float] = None
     user_sentiment: Optional[str] = None
     call_summary: Optional[str] = None
-    # Best Buy specific fields
-    issue_category: Optional[str] = None
-    product_category: Optional[str] = None
-    resolution_path: Optional[str] = None
-    troubleshooting_tier: Optional[str] = None
-    first_call_resolution: Optional[bool] = None
+    query_category: Optional[str] = None
     escalation_required: Optional[bool] = None
     query_resolved: Optional[bool] = None
-    proper_diagnosis: Optional[bool] = None
     transcript: Optional[str] = None
     recording_url: Optional[str] = None
     cost: Optional[float] = None

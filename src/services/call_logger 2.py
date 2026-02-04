@@ -1,17 +1,14 @@
 """
 Call Logger Service - Saves call data and structured outputs to CSV.
 
-Best Buy Evaluation with 10 Dimensions:
-- user_sentiment: positive | neutral | confused | frustrated | angry
+Structured Outputs from Vapi Dashboard:
+- user_sentiment: positive | neutral | confused | frustrated
 - call_summary: 2-3 sentence summary of the call
-- issue_category: Technical issue category (16 types)
-- product_category: Product category (7 types)
-- resolution_path: How issue was resolved (8 types)
-- troubleshooting_tier: Complexity tier (tier_1_basic, tier_2_intermediate, tier_3_advanced)
-- first_call_resolution: true/false - resolved on first call
+- query_category: onboarding_navigation | consent_questions | biometric_concerns | 
+                  spot_health | telehealth | permissions | data_privacy | 
+                  technical_issue | out_of_scope | general_inquiry
 - escalation_required: true/false - needs human follow-up
 - query_resolved: true/false - AI fully resolved the query
-- proper_diagnosis: true/false - correctly identified root cause
 """
 
 import csv
@@ -25,7 +22,9 @@ from src.models.domain.webhook import (
     CallLogEntry, 
     VapiWebhookPayload, 
     StructuredOutputs,
-    StructuredOutputItem
+    StructuredOutputItem,
+    UserSentiment,
+    QueryCategory
 )
 
 logger = logging.getLogger(__name__)
@@ -34,25 +33,24 @@ logger = logging.getLogger(__name__)
 DATA_DIR = Path(__file__).parent.parent.parent / "data"
 CALL_LOG_FILE = DATA_DIR / "call_logs.csv"
 
-# CSV columns for Best Buy evaluation (10 dimensions)
+# CSV columns with descriptions
 CSV_COLUMNS = [
     "call_id",              # Unique Vapi call identifier
     "timestamp",            # When the call ended (ISO format)
     "duration_seconds",     # Call duration in seconds
-    "user_sentiment",       # positive | neutral | confused | frustrated | angry
+    "user_sentiment",       # positive | neutral | confused | frustrated
     "call_summary",         # 2-3 sentence summary
-    "issue_category",       # Technical issue category
-    "product_category",     # Product category
-    "resolution_path",      # How issue was resolved
-    "troubleshooting_tier", # Complexity tier
-    "first_call_resolution",# true/false - resolved on first call
+    "query_category",       # Category for trend analysis
     "escalation_required",  # true/false - needs human follow-up
     "query_resolved",       # true/false - AI resolved query
-    "proper_diagnosis",     # true/false - correctly identified root cause
     "transcript",           # Full call transcript
     "recording_url",        # URL to call recording
     "cost"                  # Call cost in USD
 ]
+
+# Valid values for validation
+VALID_SENTIMENTS = {s.value for s in UserSentiment}
+VALID_CATEGORIES = {c.value for c in QueryCategory}
 
 
 class CallLogger:
@@ -80,7 +78,7 @@ class CallLogger:
         Append a call log entry to the CSV file.
         
         Args:
-            entry: CallLogEntry with Best Buy evaluation (10 dimensions)
+            entry: CallLogEntry with structured outputs
             
         Returns:
             True if successful, False otherwise
@@ -89,10 +87,6 @@ class CallLogger:
             with open(CALL_LOG_FILE, 'a', newline='', encoding='utf-8') as f:
                 writer = csv.DictWriter(f, fieldnames=CSV_COLUMNS)
                 
-                # Helper to convert bool to string
-                def bool_to_str(val):
-                    return str(val) if val is not None else ""
-                
                 # Convert entry to dict, handling None values
                 row = {
                     "call_id": entry.call_id,
@@ -100,14 +94,9 @@ class CallLogger:
                     "duration_seconds": entry.duration_seconds or "",
                     "user_sentiment": entry.user_sentiment or "",
                     "call_summary": self._clean_text(entry.call_summary),
-                    "issue_category": entry.issue_category or "",
-                    "product_category": entry.product_category or "",
-                    "resolution_path": entry.resolution_path or "",
-                    "troubleshooting_tier": entry.troubleshooting_tier or "",
-                    "first_call_resolution": bool_to_str(entry.first_call_resolution),
-                    "escalation_required": bool_to_str(entry.escalation_required),
-                    "query_resolved": bool_to_str(entry.query_resolved),
-                    "proper_diagnosis": bool_to_str(entry.proper_diagnosis),
+                    "query_category": entry.query_category or "",
+                    "escalation_required": str(entry.escalation_required) if entry.escalation_required is not None else "",
+                    "query_resolved": str(entry.query_resolved) if entry.query_resolved is not None else "",
                     "transcript": self._clean_text(entry.transcript),
                     "recording_url": entry.recording_url or "",
                     "cost": entry.cost or ""
