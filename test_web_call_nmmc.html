@@ -3,34 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Best Buy Adaptor Support - AI Voice Agent</title>
+    <title>NMMC Property Tax Recovery - AI Voice Agent</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Best Buy Brand Colors */
-            --bb-blue: #0046be;
-            --bb-blue-dark: #003da5;
-            --bb-yellow: #fff200;
-            --bb-black: #1d252c;
+            /* NMMC / Government Theme Colors */
+            --nmmc-blue: #1a3a6b;
+            --nmmc-blue-dark: #0f2647;
+            --nmmc-saffron: #ff9933;
+            --nmmc-green: #138808;
+            --nmmc-white: #ffffff;
             
             /* UI Colors */
-            --bg-primary: #0f1419;
-            --bg-secondary: #1a1f26;
-            --bg-card: #1e252d;
-            --bg-elevated: #252d38;
-            --accent-primary: #0046be;
-            --accent-secondary: #0066ff;
-            --accent-success: #00c853;
-            --accent-warning: #ffab00;
-            --accent-danger: #ff1744;
-            --accent-info: #00b8d4;
-            --accent-purple: #7c4dff;
-            --text-primary: #ffffff;
-            --text-secondary: #9aa5b1;
-            --text-muted: #6b7785;
-            --border: #2d3640;
+            --bg-primary: #0c1220;
+            --bg-secondary: #111827;
+            --bg-card: #1a2332;
+            --bg-elevated: #243044;
+            --accent-primary: #1a3a6b;
+            --accent-secondary: #2563eb;
+            --accent-success: #10b981;
+            --accent-warning: #ff9933;
+            --accent-danger: #ef4444;
+            --accent-info: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: #2d3a4d;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -51,9 +52,9 @@
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(ellipse at 10% 10%, rgba(0, 70, 190, 0.2) 0%, transparent 40%),
-                radial-gradient(ellipse at 90% 90%, rgba(255, 242, 0, 0.05) 0%, transparent 40%),
-                radial-gradient(ellipse at 50% 50%, rgba(0, 102, 255, 0.08) 0%, transparent 60%);
+                radial-gradient(ellipse at 10% 10%, rgba(26, 58, 107, 0.25) 0%, transparent 40%),
+                radial-gradient(ellipse at 90% 90%, rgba(255, 153, 51, 0.08) 0%, transparent 40%),
+                radial-gradient(ellipse at 50% 50%, rgba(19, 136, 8, 0.05) 0%, transparent 60%);
             z-index: -1;
         }
         
@@ -82,34 +83,35 @@
         .logo-icon {
             width: 52px;
             height: 52px;
-            background: var(--bb-yellow);
+            background: linear-gradient(135deg, var(--nmmc-saffron), #e67300);
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 28px;
-            color: var(--bb-black);
+            color: var(--nmmc-white);
             font-weight: 800;
         }
         
-        .logo-img {
-            height: 48px;
-            width: auto;
-            filter: drop-shadow(0 2px 8px rgba(0, 70, 190, 0.3));
-        }
-        
         .logo-text {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 800;
             letter-spacing: -0.5px;
         }
         
         .logo-text .highlight {
-            color: var(--bb-yellow);
+            color: var(--nmmc-saffron);
         }
         
         .logo-text .blue {
-            color: var(--bb-blue);
+            color: var(--accent-secondary);
+        }
+        
+        .logo-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
         
         .status-badge {
@@ -133,8 +135,8 @@
         }
         
         @keyframes pulse {
-            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.4); }
-            50% { opacity: 0.8; box-shadow: 0 0 0 8px rgba(0, 200, 83, 0); }
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            50% { opacity: 0.8; box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
         }
         
         /* Main Grid */
@@ -205,8 +207,8 @@
         }
         
         @keyframes glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(0, 200, 83, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(0, 200, 83, 0.5); }
+            0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.5); }
         }
         
         .call-avatar.speaking::after {
@@ -214,7 +216,7 @@
             position: absolute;
             inset: -12px;
             border-radius: 50%;
-            border: 2px solid var(--accent-primary);
+            border: 2px solid var(--nmmc-saffron);
             animation: ripple 1.5s infinite;
         }
         
@@ -251,24 +253,24 @@
         }
         
         .call-btn.start {
-            background: linear-gradient(135deg, var(--accent-success), #00a844);
-            box-shadow: 0 8px 30px rgba(0, 200, 83, 0.35);
+            background: linear-gradient(135deg, var(--accent-success), #059669);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.35);
         }
         
         .call-btn.start:hover {
             transform: scale(1.08);
-            box-shadow: 0 12px 40px rgba(0, 200, 83, 0.45);
+            box-shadow: 0 12px 40px rgba(16, 185, 129, 0.45);
         }
         
         .call-btn.end {
-            background: linear-gradient(135deg, var(--accent-danger), #d50000);
-            box-shadow: 0 8px 30px rgba(255, 23, 68, 0.35);
+            background: linear-gradient(135deg, var(--accent-danger), #dc2626);
+            box-shadow: 0 8px 30px rgba(239, 68, 68, 0.35);
         }
         
         .call-btn.end:hover { transform: scale(1.08); }
         
         .call-btn.connecting {
-            background: linear-gradient(135deg, var(--accent-warning), #ff8f00);
+            background: linear-gradient(135deg, var(--accent-warning), #e67300);
             animation: pulse-btn 1s infinite;
         }
         
@@ -290,7 +292,7 @@
         .wave-bar {
             width: 4px;
             height: 18px;
-            background: var(--accent-primary);
+            background: var(--nmmc-saffron);
             border-radius: 2px;
             opacity: 0.25;
         }
@@ -314,12 +316,6 @@
         }
         
         /* Evaluation Results */
-        .eval-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-        
         .eval-placeholder {
             display: flex;
             flex-direction: column;
@@ -414,54 +410,32 @@
             font-size: 13px;
         }
         
-        .sentiment-badge.positive {
-            background: rgba(0, 200, 83, 0.15);
+        .sentiment-badge.cooperative {
+            background: rgba(16, 185, 129, 0.15);
             color: var(--accent-success);
         }
         
-        .sentiment-badge.neutral {
-            background: rgba(0, 184, 212, 0.15);
-            color: var(--accent-info);
-        }
-        
-        .sentiment-badge.confused {
-            background: rgba(255, 171, 0, 0.15);
+        .sentiment-badge.resistant {
+            background: rgba(255, 153, 51, 0.15);
             color: var(--accent-warning);
         }
         
-        .sentiment-badge.frustrated {
-            background: rgba(255, 87, 34, 0.15);
-            color: #ff5722;
+        .sentiment-badge.confused {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--accent-info);
         }
         
-        .sentiment-badge.angry {
-            background: rgba(255, 23, 68, 0.15);
+        .sentiment-badge.hostile {
+            background: rgba(239, 68, 68, 0.15);
             color: var(--accent-danger);
         }
         
-        .category-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            background: rgba(0, 70, 190, 0.15);
-            color: var(--accent-secondary);
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: capitalize;
+        .sentiment-badge.indifferent {
+            background: rgba(100, 116, 139, 0.15);
+            color: var(--text-muted);
         }
         
-        .product-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            background: rgba(255, 242, 0, 0.12);
-            color: var(--bb-yellow);
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: capitalize;
-        }
-        
-        .resolution-badge {
+        .outcome-badge {
             display: inline-block;
             padding: 6px 12px;
             border-radius: 6px;
@@ -469,29 +443,32 @@
             font-weight: 600;
         }
         
-        .resolution-badge.virtual_resolved {
-            background: rgba(0, 200, 83, 0.15);
+        .outcome-badge.payment_agreed, .outcome-badge.date_committed {
+            background: rgba(16, 185, 129, 0.15);
             color: var(--accent-success);
         }
         
-        .resolution-badge.in_person_geeksquad,
-        .resolution-badge.in_person_store {
-            background: rgba(0, 70, 190, 0.15);
-            color: var(--accent-secondary);
+        .outcome-badge.partial_commitment {
+            background: rgba(255, 153, 51, 0.15);
+            color: var(--accent-warning);
         }
         
-        .resolution-badge.unresolved {
-            background: rgba(255, 23, 68, 0.15);
+        .outcome-badge.dispute_raised, .outcome-badge.already_paid {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--accent-info);
+        }
+        
+        .outcome-badge.refused {
+            background: rgba(239, 68, 68, 0.15);
             color: var(--accent-danger);
         }
         
-        .resolution-badge.warranty_claim,
-        .resolution-badge.manufacturer_support {
-            background: rgba(124, 77, 255, 0.15);
-            color: var(--accent-purple);
+        .outcome-badge.unreachable, .outcome-badge.call_dropped {
+            background: rgba(100, 116, 139, 0.15);
+            color: var(--text-muted);
         }
         
-        .tier-badge {
+        .consequence-badge {
             display: inline-block;
             padding: 6px 12px;
             border-radius: 6px;
@@ -499,10 +476,57 @@
             font-weight: 600;
         }
         
-        .tier-badge.tier_1 { background: rgba(0, 200, 83, 0.15); color: var(--accent-success); }
-        .tier-badge.tier_2 { background: rgba(255, 171, 0, 0.15); color: var(--accent-warning); }
-        .tier-badge.tier_3 { background: rgba(255, 23, 68, 0.15); color: var(--accent-danger); }
-        .tier-badge.na { background: rgba(107, 119, 133, 0.15); color: var(--text-muted); }
+        .consequence-badge.none { background: rgba(100, 116, 139, 0.15); color: var(--text-muted); }
+        .consequence-badge.level_1 { background: rgba(255, 153, 51, 0.15); color: var(--accent-warning); }
+        .consequence-badge.level_2 { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); }
+        .consequence-badge.level_3 { background: rgba(239, 68, 68, 0.15); color: var(--accent-danger); }
+        .consequence-badge.level_4 { background: rgba(239, 68, 68, 0.25); color: #ff6b6b; }
+        
+        .commitment-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .commitment-badge.committed_with_date { background: rgba(16, 185, 129, 0.15); color: var(--accent-success); }
+        .commitment-badge.vague_promise { background: rgba(255, 153, 51, 0.15); color: var(--accent-warning); }
+        .commitment-badge.refused { background: rgba(239, 68, 68, 0.15); color: var(--accent-danger); }
+        .commitment-badge.not_discussed { background: rgba(100, 116, 139, 0.15); color: var(--text-muted); }
+        
+        /* Compliance Score */
+        .compliance-score {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .compliance-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .compliance-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .compliance-fill.low { background: var(--accent-danger); }
+        .compliance-fill.medium { background: var(--accent-warning); }
+        .compliance-fill.high { background: var(--accent-success); }
+        
+        .compliance-number {
+            font-size: 24px;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+            min-width: 50px;
+            text-align: right;
+        }
         
         /* Status Pills */
         .status-pills {
@@ -523,22 +547,22 @@
         }
         
         .status-pill.true {
-            background: rgba(0, 200, 83, 0.12);
+            background: rgba(16, 185, 129, 0.12);
             color: var(--accent-success);
         }
         
         .status-pill.false {
-            background: rgba(107, 119, 133, 0.12);
+            background: rgba(100, 116, 139, 0.12);
             color: var(--text-muted);
         }
         
         .status-pill.warning {
-            background: rgba(255, 171, 0, 0.12);
+            background: rgba(255, 153, 51, 0.12);
             color: var(--accent-warning);
         }
         
         .status-pill.danger {
-            background: rgba(255, 23, 68, 0.12);
+            background: rgba(239, 68, 68, 0.12);
             color: var(--accent-danger);
         }
         
@@ -594,7 +618,7 @@
             width: 44px;
             height: 44px;
             border: 3px solid var(--border);
-            border-top-color: var(--accent-primary);
+            border-top-color: var(--nmmc-saffron);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 20px auto;
@@ -666,7 +690,7 @@
         }
         
         .footer-credit .name {
-            color: var(--bb-yellow);
+            color: var(--nmmc-saffron);
             font-weight: 700;
         }
         
@@ -695,12 +719,15 @@
         <!-- Header -->
         <header class="header">
             <div class="logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/f/f5/Best_Buy_Logo.svg" alt="Best Buy" class="logo-img">
-                <div class="logo-text"><span class="blue">Best Buy</span> <span class="highlight">Adaptor</span> Support</div>
+                <div class="logo-icon">N</div>
+                <div>
+                    <div class="logo-text"><span class="blue">NMMC</span> <span class="highlight">Property Tax</span> Recovery</div>
+                    <div class="logo-subtitle">Navi Mumbai Municipal Corporation &bull; AI Voice Agent</div>
+                </div>
             </div>
             <div class="status-badge">
                 <div class="status-dot"></div>
-                <span>AI Agent Online</span>
+                <span>Agent Vivek Online</span>
             </div>
         </header>
         
@@ -710,12 +737,12 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
-                        <span>🎙️</span> Voice Call
+                        <span>🎙️</span> Recovery Call
                     </div>
                     <span id="callStateLabel" style="color: var(--text-muted); font-size: 13px;">Ready</span>
                 </div>
                 <div class="call-section">
-                    <div id="callAvatar" class="call-avatar">🛒</div>
+                    <div id="callAvatar" class="call-avatar">🏛️</div>
                     <div id="callStatus" class="call-status">Ready to Connect</div>
                     <div id="callDuration" class="call-duration">00:00</div>
                     
@@ -747,16 +774,16 @@
                     <div class="card-title">
                         <span>📊</span> Call Evaluation (10 Dimensions)
                     </div>
-                    <span style="color: var(--text-muted); font-size: 12px;">Powered by Groq AI</span>
+                    <span style="color: var(--text-muted); font-size: 12px;"></span>
                 </div>
                 <div class="card-body">
                     <!-- Placeholder -->
                     <div id="evalPlaceholder" class="eval-placeholder">
-                        <div class="eval-placeholder-icon">🔍</div>
-                        <p style="font-size: 16px; font-weight: 500;">Call Evaluation Dashboard</p>
-                        <p style="font-size: 13px; margin-top: 8px; max-width: 300px;">
-                            Start a call to see AI-powered insights across sentiment, issue category, 
-                            product type, resolution path, and more.
+                        <div class="eval-placeholder-icon">🏛️</div>
+                        <p style="font-size: 16px; font-weight: 500;">NMMC Recovery Call Dashboard</p>
+                        <p style="font-size: 13px; margin-top: 8px; max-width: 320px;">
+                            Start a call to see AI-powered evaluation across citizen sentiment, 
+                            call outcome, compliance score, consequence level, and more.
                         </p>
                     </div>
                     
@@ -764,7 +791,7 @@
                     <div id="evalLoading" style="display: none;">
                         <div class="eval-placeholder">
                             <div class="loading-spinner"></div>
-                            <p style="margin-top: 16px;">Analyzing call with AI...</p>
+                            <p style="margin-top: 16px;">Analyzing recovery call with AI...</p>
                         </div>
                     </div>
                     
@@ -777,9 +804,9 @@
                             </div>
                             <div class="metric-grid">
                                 <div class="metric-card">
-                                    <div class="metric-label">Customer Sentiment</div>
-                                    <div id="evalSentiment" class="sentiment-badge positive">
-                                        <span>😊</span> Positive
+                                    <div class="metric-label">Citizen Sentiment</div>
+                                    <div id="evalSentiment" class="sentiment-badge cooperative">
+                                        <span>🤝</span> Cooperative
                                     </div>
                                 </div>
                                 <div class="metric-card">
@@ -789,40 +816,47 @@
                             </div>
                         </div>
                         
-                        <!-- Domain Metrics -->
+                        <!-- Outcome Metrics -->
                         <div class="metrics-section">
                             <div class="metrics-section-title">
-                                <span>📦</span> Domain Metrics
+                                <span>📋</span> Outcome Metrics
                             </div>
                             <div class="metric-grid">
                                 <div class="metric-card">
-                                    <div class="metric-label">Issue Category</div>
-                                    <div id="evalIssue" class="category-badge">display_visual</div>
+                                    <div class="metric-label">Call Outcome</div>
+                                    <div id="evalOutcome" class="outcome-badge payment_agreed">Payment Agreed</div>
                                 </div>
                                 <div class="metric-card">
-                                    <div class="metric-label">Product Category</div>
-                                    <div id="evalProduct" class="product-badge">tv_display</div>
+                                    <div class="metric-label">Payment Commitment</div>
+                                    <div id="evalCommitment" class="commitment-badge committed_with_date">Committed with Date</div>
                                 </div>
                                 <div class="metric-card" style="grid-column: span 2;">
-                                    <div class="metric-label">Resolution Path</div>
-                                    <div id="evalResolution" class="resolution-badge virtual_resolved">Virtual Resolved</div>
+                                    <div class="metric-label">Amount Bracket</div>
+                                    <div id="evalAmount" class="metric-value small" style="color: var(--nmmc-saffron);">--</div>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Efficiency Metrics -->
+                        <!-- Enforcement Metrics -->
                         <div class="metrics-section">
                             <div class="metrics-section-title">
-                                <span>⚡</span> Efficiency Metrics
+                                <span>⚖️</span> Enforcement Metrics
                             </div>
                             <div class="metric-grid">
                                 <div class="metric-card">
-                                    <div class="metric-label">Troubleshooting Tier</div>
-                                    <div id="evalTier" class="tier-badge tier_1">Tier 1 - Basic</div>
+                                    <div class="metric-label">Consequence Level</div>
+                                    <div id="evalConsequence" class="consequence-badge none">None</div>
                                 </div>
                                 <div class="metric-card">
-                                    <div class="metric-label">First Call Resolution</div>
-                                    <div id="evalFCR" class="metric-value small">✅ Yes</div>
+                                    <div class="metric-label">Compliance Score</div>
+                                    <div id="evalComplianceWrap">
+                                        <div class="compliance-score">
+                                            <div class="compliance-bar">
+                                                <div id="evalComplianceFill" class="compliance-fill high" style="width: 0%"></div>
+                                            </div>
+                                            <div id="evalComplianceNum" class="compliance-number" style="color: var(--accent-success);">--</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -833,14 +867,14 @@
                                 <span>✅</span> Quality & Status
                             </div>
                             <div class="status-pills">
-                                <div id="evalDiagnosis" class="status-pill true">
-                                    <span>🔍</span> Proper Diagnosis
-                                </div>
-                                <div id="evalResolved" class="status-pill true">
-                                    <span>✓</span> Query Resolved
+                                <div id="evalProtocol" class="status-pill true">
+                                    <span>📜</span> Protocol Followed
                                 </div>
                                 <div id="evalEscalation" class="status-pill false">
                                     <span>→</span> No Escalation
+                                </div>
+                                <div id="evalResponse" class="status-pill true">
+                                    <span>💬</span> Cooperative
                                 </div>
                             </div>
                         </div>
@@ -863,8 +897,9 @@
         <!-- Footer -->
         <footer class="footer">
             <div class="footer-content">
+                <div class="footer-brand">NMMC Property Tax Recovery &bull; AI-Powered Voice Agent</div>
                 <div class="footer-credit">
-                    Built by <span class="name">Vivek</span> <span class="title">(Senior Applied AI Scientist)</span> with <span class="heart">❤️</span>
+                    &nbsp;
                 </div>
             </div>
         </footer>
@@ -987,7 +1022,6 @@
                     const data = await res.json();
                     
                     if (data.calls && data.calls.length > 0) {
-                        // Find matching call or latest
                         let evaluation = null;
                         
                         if (currentCallId) {
@@ -1021,12 +1055,12 @@
             evalLoading.style.display = 'none';
             evalResults.className = 'eval-results show';
             
-            // Sentiment
+            // Citizen Sentiment
             const sentimentEl = document.getElementById('evalSentiment');
-            const sentiment = data.user_sentiment || 'neutral';
+            const sentiment = data.citizen_sentiment || 'indifferent';
             const sentimentEmojis = {
-                positive: '😊', neutral: '😐', confused: '🤔', 
-                frustrated: '😤', angry: '😠'
+                cooperative: '🤝', resistant: '🛡️', confused: '🤔',
+                hostile: '😠', indifferent: '😐'
             };
             sentimentEl.className = `sentiment-badge ${sentiment}`;
             sentimentEl.innerHTML = `<span>${sentimentEmojis[sentiment] || '😐'}</span> ${sentiment.charAt(0).toUpperCase() + sentiment.slice(1)}`;
@@ -1035,54 +1069,89 @@
             const duration = parseFloat(data.duration_seconds) || 0;
             document.getElementById('evalDuration').textContent = formatDuration(duration);
             
-            // Issue Category
-            const issue = data.issue_category || data.query_category || 'general_inquiry';
-            document.getElementById('evalIssue').textContent = issue.replace(/_/g, ' ');
+            // Call Outcome
+            const outcome = data.call_outcome || 'unreachable';
+            const outcomeEl = document.getElementById('evalOutcome');
+            outcomeEl.className = `outcome-badge ${outcome}`;
+            outcomeEl.textContent = outcome.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
             
-            // Product Category
-            const product = data.product_category || 'other_electronics';
-            document.getElementById('evalProduct').textContent = product.replace(/_/g, ' ');
+            // Payment Commitment
+            const commitment = data.payment_commitment || 'not_discussed';
+            const commitmentEl = document.getElementById('evalCommitment');
+            commitmentEl.className = `commitment-badge ${commitment}`;
+            commitmentEl.textContent = commitment.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
             
-            // Resolution Path
-            const resolution = data.resolution_path || 'unresolved';
-            const resolutionEl = document.getElementById('evalResolution');
-            resolutionEl.className = `resolution-badge ${resolution}`;
-            resolutionEl.textContent = resolution.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-            
-            // Troubleshooting Tier
-            const tier = data.troubleshooting_tier || 'not_applicable';
-            const tierEl = document.getElementById('evalTier');
-            const tierMap = {
-                'tier_1_basic': ['tier_1', 'Tier 1 - Basic'],
-                'tier_2_intermediate': ['tier_2', 'Tier 2 - Intermediate'],
-                'tier_3_advanced': ['tier_3', 'Tier 3 - Advanced'],
-                'not_applicable': ['na', 'N/A']
+            // Amount Bracket
+            const amount = data.amount_bracket || 'not_discussed';
+            const amountLabels = {
+                'under_10k': 'Under ₹10,000',
+                '10k_to_50k': '₹10,000 - ₹50,000',
+                '50k_to_1_lakh': '₹50,000 - ₹1,00,000',
+                '1_lakh_to_5_lakh': '₹1,00,000 - ₹5,00,000',
+                'above_5_lakh': 'Above ₹5,00,000',
+                'not_discussed': 'Not Discussed'
             };
-            const [tierClass, tierText] = tierMap[tier] || ['na', tier];
-            tierEl.className = `tier-badge ${tierClass}`;
-            tierEl.textContent = tierText;
+            document.getElementById('evalAmount').textContent = amountLabels[amount] || amount;
             
-            // FCR
-            const fcr = data.first_call_resolution === 'True' || data.first_call_resolution === true;
-            document.getElementById('evalFCR').innerHTML = fcr ? '✅ Yes' : '❌ No';
+            // Consequence Level
+            const consequence = data.consequence_level_reached || 'none';
+            const consequenceEl = document.getElementById('evalConsequence');
+            const consequenceMap = {
+                'none': ['none', 'None'],
+                'level_1_financial': ['level_1', 'Level 1 - Financial (DPC)'],
+                'level_2_administrative': ['level_2', 'Level 2 - Administrative'],
+                'level_3_legal': ['level_3', 'Level 3 - Legal (Seizure)'],
+                'level_4_nuclear': ['level_4', 'Level 4 - Court/Credit']
+            };
+            const [conClass, conText] = consequenceMap[consequence] || ['none', consequence];
+            consequenceEl.className = `consequence-badge ${conClass}`;
+            consequenceEl.textContent = conText;
             
-            // Proper Diagnosis
-            const diagnosis = data.proper_diagnosis === 'True' || data.proper_diagnosis === true;
-            const diagnosisEl = document.getElementById('evalDiagnosis');
-            diagnosisEl.className = `status-pill ${diagnosis ? 'true' : 'danger'}`;
-            diagnosisEl.innerHTML = `<span>${diagnosis ? '🔍' : '⚠'}</span> ${diagnosis ? 'Proper Diagnosis' : 'Misdiagnosis'}`;
+            // Compliance Score
+            const score = parseInt(data.compliance_score) || 0;
+            const fillEl = document.getElementById('evalComplianceFill');
+            const numEl = document.getElementById('evalComplianceNum');
+            fillEl.style.width = `${score * 10}%`;
+            numEl.textContent = `${score}/10`;
+            if (score <= 3) {
+                fillEl.className = 'compliance-fill low';
+                numEl.style.color = 'var(--accent-danger)';
+            } else if (score <= 6) {
+                fillEl.className = 'compliance-fill medium';
+                numEl.style.color = 'var(--accent-warning)';
+            } else {
+                fillEl.className = 'compliance-fill high';
+                numEl.style.color = 'var(--accent-success)';
+            }
             
-            // Resolved
-            const resolved = data.query_resolved === 'True' || data.query_resolved === true;
-            const resolvedEl = document.getElementById('evalResolved');
-            resolvedEl.className = `status-pill ${resolved ? 'true' : 'danger'}`;
-            resolvedEl.innerHTML = `<span>${resolved ? '✓' : '✗'}</span> ${resolved ? 'Query Resolved' : 'Unresolved'}`;
+            // Protocol Followed
+            const protocol = data.proper_protocol_followed === 'True' || data.proper_protocol_followed === true;
+            const protocolEl = document.getElementById('evalProtocol');
+            protocolEl.className = `status-pill ${protocol ? 'true' : 'danger'}`;
+            protocolEl.innerHTML = `<span>${protocol ? '📜' : '⚠'}</span> ${protocol ? 'Protocol Followed' : 'Protocol Violated'}`;
             
             // Escalation
             const escalation = data.escalation_required === 'True' || data.escalation_required === true;
             const escalationEl = document.getElementById('evalEscalation');
             escalationEl.className = `status-pill ${escalation ? 'warning' : 'false'}`;
             escalationEl.innerHTML = `<span>${escalation ? '⚠' : '→'}</span> ${escalation ? 'Escalation Needed' : 'No Escalation'}`;
+            
+            // Citizen Response Type
+            const response = data.citizen_response_type || 'disconnected';
+            const responseEl = document.getElementById('evalResponse');
+            const responseLabels = {
+                'immediate_payment': ['true', '💰 Immediate Payment'],
+                'requested_time': ['true', '📅 Requested Time'],
+                'financial_hardship': ['warning', '💸 Financial Hardship'],
+                'disputed_amount': ['warning', '❓ Disputed Amount'],
+                'claimed_paid': ['true', '✅ Claimed Paid'],
+                'abusive': ['danger', '🚫 Abusive'],
+                'disconnected': ['false', '📵 Disconnected'],
+                'cooperative_inquiry': ['true', '💬 Cooperative Inquiry']
+            };
+            const [respClass, respLabel] = responseLabels[response] || ['false', response];
+            responseEl.className = `status-pill ${respClass}`;
+            responseEl.innerHTML = respLabel;
             
             // Summary
             document.getElementById('evalSummary').textContent = data.call_summary || 'No summary available';
@@ -1103,7 +1172,7 @@
         });
         
         async function init() {
-            log('Initializing Best Buy Adaptor Support...', 'info');
+            log('Initializing NMMC Property Tax Recovery Agent...', 'info');
             
             try {
                 const res = await fetch('/trigger_call/', {
@@ -1155,7 +1224,7 @@
                 vapi.on('speech-start', () => setSpeaking(true));
                 vapi.on('speech-end', () => setSpeaking(false));
                 
-                log('Ready!', 'success');
+                log('Agent Vivek ready!', 'success');
                 setCallState('idle');
                 
             } catch(e) {
@@ -1170,7 +1239,7 @@
                 log('Ending call...', 'info');
                 vapi.stop();
             } else {
-                log('Starting call...', 'info');
+                log('Starting recovery call...', 'info');
                 setCallState('connecting');
                 
                 currentCallId = null;

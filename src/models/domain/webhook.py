@@ -10,7 +10,7 @@ Official Vapi Webhook Format (from docs.vapi.ai):
     "id": "call_abc123",
     "artifact": {
       "structuredOutputs": {
-        "<uuid>": { "name": "user_sentiment", "result": "positive" },
+        "<uuid>": { "name": "citizen_sentiment", "result": "cooperative" },
         "<uuid>": { "name": "call_summary", "result": "..." }
       }
     }
@@ -25,37 +25,28 @@ from enum import Enum
 
 
 # =============================================================================
-# STRUCTURED OUTPUT ENUMS - Match your Vapi Dashboard configuration
+# STRUCTURED OUTPUT ENUMS - NMMC Property Tax Recovery
 # =============================================================================
 
-class UserSentiment(str, Enum):
-    """
-    User sentiment classification.
-    
-    Assess the user's emotional state based on their tone and words.
-    """
-    POSITIVE = "positive"      # User expressed thanks, satisfaction, or relief
-    NEUTRAL = "neutral"        # Matter-of-fact interaction, no strong emotion
-    CONFUSED = "confused"      # User needed multiple explanations or seemed uncertain
-    FRUSTRATED = "frustrated"  # User expressed annoyance, complained, or seemed upset
+class CitizenSentiment(str, Enum):
+    """Citizen sentiment classification for property tax recovery calls."""
+    COOPERATIVE = "cooperative"
+    RESISTANT = "resistant"
+    CONFUSED = "confused"
+    HOSTILE = "hostile"
+    INDIFFERENT = "indifferent"
 
 
-class QueryCategory(str, Enum):
-    """
-    Query category classification for identifying trends and pain points.
-    
-    Classify the primary topic into exactly one category.
-    """
-    ONBOARDING_NAVIGATION = "onboarding_navigation"  # Stuck on screens, button issues
-    CONSENT_QUESTIONS = "consent_questions"          # EULA, privacy, terms
-    BIOMETRIC_CONCERNS = "biometric_concerns"        # Face ID, data privacy
-    SPOT_HEALTH = "spot_health"                      # Testing questions
-    TELEHEALTH = "telehealth"                        # Results delivery
-    PERMISSIONS = "permissions"                       # Notifications, microphone
-    DATA_PRIVACY = "data_privacy"                    # Data sharing, rights
-    TECHNICAL_ISSUE = "technical_issue"              # Bugs, crashes
-    OUT_OF_SCOPE = "out_of_scope"                    # Medical advice, billing
-    GENERAL_INQUIRY = "general_inquiry"              # Other app questions
+class CallOutcomeCategory(str, Enum):
+    """Call outcome classification for NMMC recovery calls."""
+    PAYMENT_AGREED = "payment_agreed"
+    DATE_COMMITTED = "date_committed"
+    PARTIAL_COMMITMENT = "partial_commitment"
+    DISPUTE_RAISED = "dispute_raised"
+    REFUSED = "refused"
+    UNREACHABLE = "unreachable"
+    CALL_DROPPED = "call_dropped"
+    ALREADY_PAID = "already_paid"
 
 
 # =============================================================================
@@ -65,48 +56,48 @@ class QueryCategory(str, Enum):
 class StructuredOutputItem(BaseModel):
     """
     Individual structured output item from Vapi webhook.
-    
+
     Each structured output is keyed by UUID with name and result.
     """
-    name: str = Field(..., description="Name of the structured output (e.g., 'user_sentiment')")
+    name: str = Field(..., description="Name of the structured output (e.g., 'citizen_sentiment')")
     result: Any = Field(None, description="The extracted value (string, boolean, object, etc.)")
 
 
 class StructuredOutputs(BaseModel):
     """
-    Parsed structured outputs from call conversations.
-    
-    These match the 5 structured outputs configured in Vapi Dashboard:
-    1. user_sentiment - Monitor customer satisfaction
-    2. call_summary - Brief summary for support team
-    3. query_category - Categorize for trends analysis
-    4. escalation_required - Flag for human follow-up
-    5. query_resolved - Track AI resolution success
+    Parsed structured outputs from NMMC Property Tax Recovery calls.
+
+    These match the structured outputs configured in Vapi Dashboard:
+    1. citizen_sentiment - Monitor citizen cooperativeness
+    2. call_summary - Brief summary for recovery team
+    3. call_outcome - Outcome classification
+    4. escalation_required - Flag for supervisor/legal escalation
+    5. compliance_score - Likelihood of payment (1-10)
     """
-    
-    user_sentiment: Optional[str] = Field(
-        None, 
-        description="User emotional state: positive, neutral, confused, or frustrated"
+
+    citizen_sentiment: Optional[str] = Field(
+        None,
+        description="Citizen emotional state: cooperative, resistant, confused, hostile, or indifferent"
     )
-    
+
     call_summary: Optional[str] = Field(
-        None, 
-        description="2-3 sentence summary: what user asked, how AI helped, outcome"
+        None,
+        description="2-3 sentence summary: who was called, what was discussed, outcome"
     )
-    
-    query_category: Optional[str] = Field(
-        None, 
-        description="Primary topic category for trend analysis"
+
+    call_outcome: Optional[str] = Field(
+        None,
+        description="Call outcome category for tracking recovery success"
     )
-    
+
     escalation_required: Optional[bool] = Field(
-        None, 
-        description="True if call needs human follow-up from support team"
+        None,
+        description="True if case needs supervisor review or legal escalation"
     )
-    
-    query_resolved: Optional[bool] = Field(
-        None, 
-        description="True if AI fully answered the query without needing escalation"
+
+    compliance_score: Optional[int] = Field(
+        None,
+        description="Likelihood of payment from 1 (won't pay) to 10 (immediate payment)"
     )
 
 
@@ -173,21 +164,30 @@ class VapiWebhookPayload(BaseModel):
 
 
 class CallLogEntry(BaseModel):
-    """Entry for CSV logging - Best Buy evaluation with 10 dimensions."""
+    """Entry for CSV logging - NMMC Property Tax Recovery evaluation with 10 dimensions."""
     call_id: str
     timestamp: str
     duration_seconds: Optional[float] = None
-    user_sentiment: Optional[str] = None
+
+    # Core Metrics
+    citizen_sentiment: Optional[str] = None
     call_summary: Optional[str] = None
-    # Best Buy specific fields
-    issue_category: Optional[str] = None
-    product_category: Optional[str] = None
-    resolution_path: Optional[str] = None
-    troubleshooting_tier: Optional[str] = None
-    first_call_resolution: Optional[bool] = None
     escalation_required: Optional[bool] = None
-    query_resolved: Optional[bool] = None
-    proper_diagnosis: Optional[bool] = None
+
+    # Outcome Metrics
+    call_outcome: Optional[str] = None
+    citizen_response_type: Optional[str] = None
+    payment_commitment: Optional[str] = None
+
+    # Enforcement Metrics
+    consequence_level_reached: Optional[str] = None
+    proper_protocol_followed: Optional[bool] = None
+
+    # Context Metrics
+    compliance_score: Optional[int] = None
+    amount_bracket: Optional[str] = None
+
+    # Call Data
     transcript: Optional[str] = None
     recording_url: Optional[str] = None
     cost: Optional[float] = None

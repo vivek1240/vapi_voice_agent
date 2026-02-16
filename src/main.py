@@ -25,7 +25,7 @@ async def lifespan(_: FastAPI) -> AsyncGenerator[None, None]:
     yield
     logger.info("Application shutdown")
 
-app = FastAPI(title="Personal Assistant Voice Agent", lifespan=lifespan)
+app = FastAPI(title="NMMC Property Tax Recovery Voice Agent", lifespan=lifespan)
 
 # Add CORS middleware to allow web-based calls from any origin
 app.add_middleware(
@@ -46,20 +46,13 @@ app.include_router(calendar_event.router, include_in_schema=False)
 app.include_router(call.router)
 app.include_router(webhook.router)
 
-# Serve test page for web calls
-@app.get("/test-call")
-async def test_call_page():
-    """Serve the web call test page"""
-    from pathlib import Path
-    html_path = Path(__file__).resolve().parent.parent / "test_web_call.html"
-    return FileResponse(str(html_path), media_type="text/html")
-
-@app.get("/bestbuy")
+# Serve NMMC Property Tax Recovery page
+@app.get("/nmmc")
 @app.get("/")
-async def bestbuy_page():
-    """Serve the Best Buy Adaptor Support page"""
+async def nmmc_page():
+    """Serve the NMMC Property Tax Recovery page"""
     from pathlib import Path
-    html_path = Path(__file__).resolve().parent.parent / "test_web_call_bestbuy.html"
+    html_path = Path(__file__).resolve().parent.parent / "test_web_call_nmmc.html"
     return FileResponse(str(html_path), media_type="text/html")
 
 if __name__ == "__main__":

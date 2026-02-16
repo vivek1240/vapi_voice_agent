@@ -136,6 +136,11 @@ class CallService:
             if system_prompt:
                 if "model" not in assistant_overrides:
                     assistant_overrides["model"] = {}
+                # Vapi requires model.provider when model object is present in overrides
+                if "provider" not in assistant_overrides["model"]:
+                    assistant_overrides["model"]["provider"] = "openai"
+                if "model" not in assistant_overrides["model"] or not assistant_overrides["model"].get("model"):
+                    assistant_overrides["model"]["model"] = "gpt-4o"
                 assistant_overrides["model"]["messages"] = [
                     {"role": "system", "content": system_prompt}
                 ]

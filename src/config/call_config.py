@@ -13,10 +13,11 @@ Priority order:
 
 from pydantic import BaseModel
 from typing import Optional
+from src.config.nmmc_system_prompt import NMMC_SYSTEM_PROMPT
 
 
 # =============================================================================
-# DEFAULT CONFIGURATION - Edit these values!
+# DEFAULT CONFIGURATION — NMMC Property Tax Recovery Agent "Vivek"
 # =============================================================================
 # Set to None to use Vapi dashboard defaults
 # Set to a value to override for all calls
@@ -32,9 +33,9 @@ DEFAULTS = {
     "voice_provider": None,        # e.g., "11labs", "playht", "deepgram", "openai"
     "voice_id": None,              # e.g., "sarah", "burt", "rachel"
     
-    # Assistant Behavior
-    "first_message": None,         # e.g., "Hello! How can I help you today?"
-    "system_prompt": None,         # e.g., "You are a helpful assistant..."
+    # Assistant Behavior — NMMC Property Tax Recovery
+    "first_message": "Good day. My name is Vivek and I am calling from the Property Tax Department of the Navi Mumbai Municipal Corporation. Am I speaking with Shitiz?",
+    "system_prompt": NMMC_SYSTEM_PROMPT,
 }
 # =============================================================================
 

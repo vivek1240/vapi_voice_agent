@@ -1,17 +1,17 @@
 """
 Call Logger Service - Saves call data and structured outputs to CSV.
 
-Best Buy Evaluation with 10 Dimensions:
-- user_sentiment: positive | neutral | confused | frustrated | angry
+NMMC Property Tax Recovery Evaluation with 10 Dimensions:
+- citizen_sentiment: cooperative | resistant | confused | hostile | indifferent
 - call_summary: 2-3 sentence summary of the call
-- issue_category: Technical issue category (16 types)
-- product_category: Product category (7 types)
-- resolution_path: How issue was resolved (8 types)
-- troubleshooting_tier: Complexity tier (tier_1_basic, tier_2_intermediate, tier_3_advanced)
-- first_call_resolution: true/false - resolved on first call
-- escalation_required: true/false - needs human follow-up
-- query_resolved: true/false - AI fully resolved the query
-- proper_diagnosis: true/false - correctly identified root cause
+- call_outcome: payment_agreed | date_committed | partial_commitment | dispute_raised | refused | unreachable | call_dropped | already_paid
+- consequence_level_reached: none | level_1_financial | level_2_administrative | level_3_legal | level_4_nuclear
+- citizen_response_type: immediate_payment | requested_time | financial_hardship | disputed_amount | claimed_paid | abusive | disconnected | cooperative_inquiry
+- payment_commitment: committed_with_date | vague_promise | refused | not_discussed
+- proper_protocol_followed: true/false - agent followed proper call protocol
+- escalation_required: true/false - needs supervisor/legal escalation
+- compliance_score: 1-10 likelihood of payment
+- amount_bracket: outstanding amount range
 """
 
 import csv
@@ -22,8 +22,8 @@ from pathlib import Path
 from typing import Optional
 
 from src.models.domain.webhook import (
-    CallLogEntry, 
-    VapiWebhookPayload, 
+    CallLogEntry,
+    VapiWebhookPayload,
     StructuredOutputs,
     StructuredOutputItem
 )
@@ -34,24 +34,24 @@ logger = logging.getLogger(__name__)
 DATA_DIR = Path(__file__).parent.parent.parent / "data"
 CALL_LOG_FILE = DATA_DIR / "call_logs.csv"
 
-# CSV columns for Best Buy evaluation (10 dimensions)
+# CSV columns for NMMC Property Tax evaluation (10 dimensions)
 CSV_COLUMNS = [
-    "call_id",              # Unique Vapi call identifier
-    "timestamp",            # When the call ended (ISO format)
-    "duration_seconds",     # Call duration in seconds
-    "user_sentiment",       # positive | neutral | confused | frustrated | angry
-    "call_summary",         # 2-3 sentence summary
-    "issue_category",       # Technical issue category
-    "product_category",     # Product category
-    "resolution_path",      # How issue was resolved
-    "troubleshooting_tier", # Complexity tier
-    "first_call_resolution",# true/false - resolved on first call
-    "escalation_required",  # true/false - needs human follow-up
-    "query_resolved",       # true/false - AI resolved query
-    "proper_diagnosis",     # true/false - correctly identified root cause
-    "transcript",           # Full call transcript
-    "recording_url",        # URL to call recording
-    "cost"                  # Call cost in USD
+    "call_id",                    # Unique Vapi call identifier
+    "timestamp",                  # When the call ended (ISO format)
+    "duration_seconds",           # Call duration in seconds
+    "citizen_sentiment",          # cooperative | resistant | confused | hostile | indifferent
+    "call_summary",               # 2-3 sentence summary
+    "escalation_required",        # true/false - needs supervisor/legal escalation
+    "call_outcome",               # Call outcome classification
+    "citizen_response_type",      # How the citizen responded
+    "payment_commitment",         # Payment commitment level
+    "consequence_level_reached",  # Highest consequence level disclosed
+    "proper_protocol_followed",   # true/false - agent followed protocol
+    "compliance_score",           # 1-10 likelihood of payment
+    "amount_bracket",             # Outstanding amount bracket
+    "transcript",                 # Full call transcript
+    "recording_url",              # URL to call recording
+    "cost"                        # Call cost in USD
 ]
 
 
@@ -80,7 +80,7 @@ class CallLogger:
         Append a call log entry to the CSV file.
         
         Args:
-            entry: CallLogEntry with Best Buy evaluation (10 dimensions)
+            entry: CallLogEntry with NMMC evaluation (10 dimensions)
             
         Returns:
             True if successful, False otherwise
@@ -93,21 +93,25 @@ class CallLogger:
                 def bool_to_str(val):
                     return str(val) if val is not None else ""
                 
+                # Helper to convert int to string
+                def int_to_str(val):
+                    return str(val) if val is not None else ""
+                
                 # Convert entry to dict, handling None values
                 row = {
                     "call_id": entry.call_id,
                     "timestamp": entry.timestamp,
                     "duration_seconds": entry.duration_seconds or "",
-                    "user_sentiment": entry.user_sentiment or "",
+                    "citizen_sentiment": entry.citizen_sentiment or "",
                     "call_summary": self._clean_text(entry.call_summary),
-                    "issue_category": entry.issue_category or "",
-                    "product_category": entry.product_category or "",
-                    "resolution_path": entry.resolution_path or "",
-                    "troubleshooting_tier": entry.troubleshooting_tier or "",
-                    "first_call_resolution": bool_to_str(entry.first_call_resolution),
                     "escalation_required": bool_to_str(entry.escalation_required),
-                    "query_resolved": bool_to_str(entry.query_resolved),
-                    "proper_diagnosis": bool_to_str(entry.proper_diagnosis),
+                    "call_outcome": entry.call_outcome or "",
+                    "citizen_response_type": entry.citizen_response_type or "",
+                    "payment_commitment": entry.payment_commitment or "",
+                    "consequence_level_reached": entry.consequence_level_reached or "",
+                    "proper_protocol_followed": bool_to_str(entry.proper_protocol_followed),
+                    "compliance_score": int_to_str(entry.compliance_score),
+                    "amount_bracket": entry.amount_bracket or "",
                     "transcript": self._clean_text(entry.transcript),
                     "recording_url": entry.recording_url or "",
                     "cost": entry.cost or ""
@@ -170,7 +174,6 @@ class CallLogger:
                     logger.warning(f"Could not parse call duration: {e}")
             
             # Extract structured outputs from call.artifact.structuredOutputs
-            # Format: { "<uuid>": { "name": "field_name", "result": value }, ... }
             structured = self._parse_structured_outputs(call)
             
             # Get transcript and recording from artifact
@@ -191,11 +194,11 @@ class CallLogger:
                 call_id=call_id,
                 timestamp=timestamp,
                 duration_seconds=duration,
-                user_sentiment=structured.user_sentiment if structured else None,
+                citizen_sentiment=structured.citizen_sentiment if structured else None,
                 call_summary=structured.call_summary if structured else None,
-                query_category=structured.query_category if structured else None,
+                call_outcome=structured.call_outcome if structured else None,
                 escalation_required=structured.escalation_required if structured else None,
-                query_resolved=structured.query_resolved if structured else None,
+                compliance_score=structured.compliance_score if structured else None,
                 transcript=transcript,
                 recording_url=recording_url,
                 cost=call.cost
@@ -212,7 +215,7 @@ class CallLogger:
         Parse structured outputs from Vapi call artifact.
         
         Vapi format: call.artifact.structuredOutputs = {
-            "<uuid>": { "name": "user_sentiment", "result": "positive" },
+            "<uuid>": { "name": "citizen_sentiment", "result": "cooperative" },
             "<uuid>": { "name": "call_summary", "result": "..." },
             ...
         }
@@ -238,11 +241,11 @@ class CallLogger:
             
             # Map to our StructuredOutputs model
             return StructuredOutputs(
-                user_sentiment=result_map.get("user_sentiment"),
+                citizen_sentiment=result_map.get("citizen_sentiment"),
                 call_summary=result_map.get("call_summary"),
-                query_category=result_map.get("query_category"),
+                call_outcome=result_map.get("call_outcome"),
                 escalation_required=self._parse_bool(result_map.get("escalation_required")),
-                query_resolved=self._parse_bool(result_map.get("query_resolved"))
+                compliance_score=self._parse_int(result_map.get("compliance_score"))
             )
             
         except Exception as e:
@@ -258,6 +261,19 @@ class CallLogger:
         if isinstance(value, str):
             return value.lower() in ("true", "yes", "1")
         return bool(value)
+    
+    def _parse_int(self, value) -> Optional[int]:
+        """Parse integer value from various formats."""
+        if value is None:
+            return None
+        if isinstance(value, int):
+            return value
+        if isinstance(value, (float, str)):
+            try:
+                return int(value)
+            except (ValueError, TypeError):
+                return None
+        return None
     
     def get_log_file_path(self) -> str:
         """Return the path to the CSV log file."""
@@ -299,4 +315,3 @@ def get_call_logger() -> CallLogger:
     if _call_logger is None:
         _call_logger = CallLogger()
     return _call_logger
-

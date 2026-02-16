@@ -15,7 +15,7 @@ from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import JSONResponse
 
 from src.services.call_logger import get_call_logger
-from src.services.bestbuy_call_evaluator import get_bestbuy_call_evaluator
+from src.services.nmmc_call_evaluator import get_nmmc_call_evaluator
 from src.models.domain.webhook import CallLogEntry
 
 logger = logging.getLogger(__name__)
@@ -103,46 +103,46 @@ async def vapi_webhook(request: Request):
                 role = msg.get("role", "")
                 content = msg.get("message", "")
                 if role in ["user", "bot", "assistant"] and content:
-                    speaker = "User" if role == "user" else "Assistant"
+                    speaker = "Citizen" if role == "user" else "Agent"
                     transcript_parts.append(f"{speaker}: {content}")
             transcript = "\n".join(transcript_parts)
             
             if transcript:
                 logger.info(f"Built transcript: {len(transcript)} chars, {len(messages)} messages")
             
-            # Run LLM evaluation on transcript using Groq
+            # Run NMMC LLM evaluation on transcript using Groq
             parsed_outputs = {}
             
             if transcript:
                 try:
-                    evaluator = get_bestbuy_call_evaluator()
+                    evaluator = get_nmmc_call_evaluator()
                     if evaluator.is_available():
-                        logger.info("🤖 Running Best Buy LLM evaluation on transcript...")
+                        logger.info("🤖 Running NMMC Property Tax LLM evaluation on transcript...")
                         evaluation = evaluator.evaluate(transcript)
                         
                         if evaluation:
-                            # Best Buy evaluation has 10 dimensions
+                            # NMMC evaluation has 10 dimensions
                             parsed_outputs = {
-                                "user_sentiment": evaluation.user_sentiment.value,
+                                "citizen_sentiment": evaluation.citizen_sentiment.value,
                                 "call_summary": evaluation.call_summary,
-                                "issue_category": evaluation.issue_category.value,
-                                "product_category": evaluation.product_category.value,
-                                "resolution_path": evaluation.resolution_path.value,
-                                "troubleshooting_tier": evaluation.troubleshooting_tier.value,
-                                "first_call_resolution": evaluation.first_call_resolution,
+                                "call_outcome": evaluation.call_outcome.value,
+                                "consequence_level_reached": evaluation.consequence_level_reached.value,
+                                "citizen_response_type": evaluation.citizen_response_type.value,
+                                "payment_commitment": evaluation.payment_commitment.value,
+                                "proper_protocol_followed": evaluation.proper_protocol_followed,
                                 "escalation_required": evaluation.escalation_required,
-                                "query_resolved": evaluation.query_resolved,
-                                "proper_diagnosis": evaluation.proper_diagnosis
+                                "compliance_score": evaluation.compliance_score,
+                                "amount_bracket": evaluation.amount_bracket.value
                             }
-                            logger.info(f"  📊 Sentiment: {evaluation.user_sentiment.value}")
-                            logger.info(f"  📊 Issue: {evaluation.issue_category.value}")
-                            logger.info(f"  📊 Product: {evaluation.product_category.value}")
-                            logger.info(f"  📊 Resolution: {evaluation.resolution_path.value}")
-                            logger.info(f"  📊 Tier: {evaluation.troubleshooting_tier.value}")
-                            logger.info(f"  📊 FCR: {evaluation.first_call_resolution}")
-                            logger.info(f"  📊 Resolved: {evaluation.query_resolved}")
+                            logger.info(f"  📊 Sentiment: {evaluation.citizen_sentiment.value}")
+                            logger.info(f"  📊 Outcome: {evaluation.call_outcome.value}")
+                            logger.info(f"  📊 Consequence Level: {evaluation.consequence_level_reached.value}")
+                            logger.info(f"  📊 Response: {evaluation.citizen_response_type.value}")
+                            logger.info(f"  📊 Commitment: {evaluation.payment_commitment.value}")
+                            logger.info(f"  📊 Compliance: {evaluation.compliance_score}/10")
+                            logger.info(f"  📊 Protocol: {evaluation.proper_protocol_followed}")
                             logger.info(f"  📊 Escalation: {evaluation.escalation_required}")
-                            logger.info(f"  📊 Diagnosis: {evaluation.proper_diagnosis}")
+                            logger.info(f"  📊 Amount: {evaluation.amount_bracket.value}")
                         else:
                             logger.warning("LLM evaluation returned None")
                     else:
@@ -169,26 +169,37 @@ async def vapi_webhook(request: Request):
                         return val.lower() == "true"
                     return None
                 
+                # Handle int conversions
+                def to_int(val):
+                    if isinstance(val, int):
+                        return val
+                    if isinstance(val, (float, str)):
+                        try:
+                            return int(val)
+                        except (ValueError, TypeError):
+                            return None
+                    return None
+                
                 # Get duration and cost from message level (end-of-call-report)
                 duration = message.get("durationSeconds")
                 cost = message.get("cost")
                 recording_url = artifact.get("recordingUrl") or message.get("recordingUrl")
                 
-                # Best Buy CallLogEntry with 10 dimensions
+                # NMMC CallLogEntry with 10 dimensions
                 entry = CallLogEntry(
                     call_id=call_id,
                     timestamp=datetime.now().isoformat(),
                     duration_seconds=duration,
-                    user_sentiment=parsed_outputs.get("user_sentiment"),
+                    citizen_sentiment=parsed_outputs.get("citizen_sentiment"),
                     call_summary=parsed_outputs.get("call_summary"),
-                    issue_category=parsed_outputs.get("issue_category"),
-                    product_category=parsed_outputs.get("product_category"),
-                    resolution_path=parsed_outputs.get("resolution_path"),
-                    troubleshooting_tier=parsed_outputs.get("troubleshooting_tier"),
-                    first_call_resolution=to_bool(parsed_outputs.get("first_call_resolution")),
                     escalation_required=to_bool(parsed_outputs.get("escalation_required")),
-                    query_resolved=to_bool(parsed_outputs.get("query_resolved")),
-                    proper_diagnosis=to_bool(parsed_outputs.get("proper_diagnosis")),
+                    call_outcome=parsed_outputs.get("call_outcome"),
+                    citizen_response_type=parsed_outputs.get("citizen_response_type"),
+                    payment_commitment=parsed_outputs.get("payment_commitment"),
+                    consequence_level_reached=parsed_outputs.get("consequence_level_reached"),
+                    proper_protocol_followed=to_bool(parsed_outputs.get("proper_protocol_followed")),
+                    compliance_score=to_int(parsed_outputs.get("compliance_score")),
+                    amount_bracket=parsed_outputs.get("amount_bracket"),
                     transcript=transcript[:5000] if transcript else None,
                     recording_url=recording_url,
                     cost=cost
@@ -280,7 +291,7 @@ async def download_call_logs():
     
     return FileResponse(
         path=file_path,
-        filename="call_logs.csv",
+        filename="nmmc_call_logs.csv",
         media_type="text/csv"
     )
 
@@ -288,13 +299,14 @@ async def download_call_logs():
 @router.get("/call-logs/stats")
 async def get_call_statistics():
     """
-    Get statistics from call logs - sentiment distribution, categories, resolution rates.
+    Get statistics from NMMC property tax recovery call logs.
     
     Useful for:
-    - Monitoring customer satisfaction (sentiment trends)
-    - Identifying common pain points (query categories)
-    - Measuring AI effectiveness (resolution rate)
-    - Tracking escalation needs
+    - Monitoring citizen sentiment trends
+    - Tracking call outcomes (payment agreed, refused, etc.)
+    - Measuring compliance scores and recovery effectiveness
+    - Tracking escalation and consequence levels
+    - Zone-wise analysis
     """
     import csv
     from collections import Counter
@@ -320,15 +332,30 @@ async def get_call_statistics():
         # Calculate statistics
         total_calls = len(rows)
         
-        # Sentiment distribution
-        sentiments = Counter(row.get('user_sentiment', '') for row in rows if row.get('user_sentiment'))
+        # Citizen sentiment distribution
+        sentiments = Counter(row.get('citizen_sentiment', '') for row in rows if row.get('citizen_sentiment'))
         
-        # Query categories
-        categories = Counter(row.get('query_category', '') for row in rows if row.get('query_category'))
+        # Call outcome distribution
+        outcomes = Counter(row.get('call_outcome', '') for row in rows if row.get('call_outcome'))
         
-        # Resolution and escalation rates
-        resolved_count = sum(1 for row in rows if row.get('query_resolved', '').lower() == 'true')
+        # Payment commitment distribution
+        commitments = Counter(row.get('payment_commitment', '') for row in rows if row.get('payment_commitment'))
+        
+        # Consequence level distribution
+        consequence_levels = Counter(row.get('consequence_level_reached', '') for row in rows if row.get('consequence_level_reached'))
+        
+        # Escalation rate
         escalated_count = sum(1 for row in rows if row.get('escalation_required', '').lower() == 'true')
+        
+        # Protocol compliance rate
+        protocol_count = sum(1 for row in rows if row.get('proper_protocol_followed', '').lower() == 'true')
+        
+        # Average compliance score
+        scores = [int(row['compliance_score']) for row in rows if row.get('compliance_score')]
+        avg_compliance = sum(scores) / len(scores) if scores else 0
+        
+        # Amount bracket distribution
+        amount_brackets = Counter(row.get('amount_bracket', '') for row in rows if row.get('amount_bracket'))
         
         # Average duration
         durations = [float(row['duration_seconds']) for row in rows if row.get('duration_seconds')]
@@ -338,14 +365,22 @@ async def get_call_statistics():
         costs = [float(row['cost']) for row in rows if row.get('cost')]
         total_cost = sum(costs)
         
+        # Recovery success rate (payment_agreed + date_committed)
+        recovery_success = sum(1 for row in rows if row.get('call_outcome') in ('payment_agreed', 'date_committed'))
+        
         return {
             "status": "ok",
             "total_calls": total_calls,
-            "sentiment_distribution": dict(sentiments),
-            "query_categories": dict(categories),
-            "resolution_rate": f"{(resolved_count / total_calls * 100):.1f}%" if total_calls > 0 else "N/A",
+            "citizen_sentiment_distribution": dict(sentiments),
+            "call_outcome_distribution": dict(outcomes),
+            "payment_commitment_distribution": dict(commitments),
+            "consequence_level_distribution": dict(consequence_levels),
+            "amount_bracket_distribution": dict(amount_brackets),
+            "recovery_success_rate": f"{(recovery_success / total_calls * 100):.1f}%" if total_calls > 0 else "N/A",
             "escalation_rate": f"{(escalated_count / total_calls * 100):.1f}%" if total_calls > 0 else "N/A",
-            "resolved_count": resolved_count,
+            "protocol_compliance_rate": f"{(protocol_count / total_calls * 100):.1f}%" if total_calls > 0 else "N/A",
+            "average_compliance_score": round(avg_compliance, 1),
+            "recovery_success_count": recovery_success,
             "escalated_count": escalated_count,
             "average_duration_seconds": round(avg_duration, 1),
             "total_cost_usd": round(total_cost, 4)
@@ -354,6 +389,3 @@ async def get_call_statistics():
     except Exception as e:
         logger.error(f"Error calculating statistics: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
-
-
