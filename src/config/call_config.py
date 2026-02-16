@@ -34,7 +34,8 @@ DEFAULTS = {
     "voice_id": None,              # e.g., "sarah", "burt", "rachel"
     
     # Assistant Behavior — NMMC Property Tax Recovery
-    "first_message": "Good day. My name is Vivek and I am calling from the Property Tax Department of the Navi Mumbai Municipal Corporation. Am I speaking with Shitiz?",
+    # Keep firstMessage as a short intro; the identity confirmation question is handled once in the system prompt.
+    "first_message": "Good day. My name is Vivek and I am calling from the Property Tax Department of the Navi Mumbai Municipal Corporation.",
     "system_prompt": NMMC_SYSTEM_PROMPT,
 }
 # =============================================================================
